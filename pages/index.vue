@@ -185,7 +185,7 @@ export default {
       }
     },
     GoToContact() {
-      this.$router.push('/contact');
+      this.$router.push('/contacts');
     },
     GoToRealisations() {
       this.$router.push('/realisations');
