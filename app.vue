@@ -41,14 +41,17 @@ useHead({
     { name: 'twitter:image', content: 'https://www.weblinking.ma/_nuxt/img/logo_weblinking.png' }
   ],
   link: [
-    { rel: 'icon', type: 'image/png', href: '/favicon.ico' }, 
+    { rel: 'icon', type: 'image/png', href: '/favicon.png' }, // make sure this file exists in /public
+    { rel: 'canonical', href: 'https://www.weblinking.ma/' }
+  ]
+})
 
-     {
+useHead({
+  link: [
+    {
       rel: 'stylesheet',
       href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'
     }
   ]
 })
-
-
 </script>

@@ -3,7 +3,7 @@
     <div class="header">
       <div class="header-container">
         <div class="logo-container" @click="Home">
-          <img src="/logo.png" alt="Weblinking Logo" class="logo">
+          <img src="/Logo.png" alt="Weblinking Logo" class="logo">
         </div>
 
         <nav class="nav-items">
