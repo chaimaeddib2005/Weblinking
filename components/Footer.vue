@@ -2,7 +2,7 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-brand">
-                <img src="/logo.png" alt="Weblinking Logo" class="footer-logo">
+                <img src="/Logo.png" alt="Weblinking Logo" class="footer-logo">
             </div>
       
             <div class="footer-section">
