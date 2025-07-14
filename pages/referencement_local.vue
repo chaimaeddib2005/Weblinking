@@ -112,7 +112,7 @@ export default {
   margin: 80px 0;
   padding: 30px;
   border-radius: 12px;
-  background-color: white;
+  background-color: #f3f3f3;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
@@ -147,7 +147,6 @@ export default {
   height: auto;
   border-radius: 8px;
   object-fit: cover;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 

@@ -117,6 +117,9 @@ export default {
   display: flex;
   align-items: center;
   gap: 50px;
+  background-color: #f3f3f3;
+  padding: 40px;
+  border-radius: 10px;
 }
 
 .text-content {

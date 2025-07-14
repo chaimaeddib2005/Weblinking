@@ -31,11 +31,16 @@
         <h6 class="middle-text">{{ content.middle_paragraph.content }}</h6>
       </div>
 
-      <div class="modals-row">
-        <div v-for="(modal,index) in modals" :key="index" class="modal-card">
-          <img :src="modal.icon" class="modal-icon">
-          <p class="modal-description">{{ modal.description }}</p>
+      <!-- Updated Modals Section with Scroll -->
+      <div class="modals-container">
+        <div class="modals-row">
+          <div v-for="(modal,index) in modals" :key="index" class="modal-card">
+            <img :src="modal.icon" class="modal-icon">
+            <p class="modal-description">{{ modal.description }}</p>
+          </div>
         </div>
+        <div class="scroll-indicator scroll-left" @click="scrollModals(-300)">←</div>
+        <div class="scroll-indicator scroll-right" @click="scrollModals(300)">→</div>
       </div>
     </div>
 
@@ -66,6 +71,17 @@ export default {
         if(this.content[key].description) {
           this.modals.push(this.content[key]);
         }
+      }
+    }
+  },
+  methods: {
+    scrollModals(offset) {
+      const modalsEl = this.$el.querySelector('.modals-row');
+      if (modalsEl) {
+        modalsEl.scrollBy({
+          left: offset,
+          behavior: 'smooth'
+        });
       }
     }
   }
@@ -176,19 +192,34 @@ export default {
   margin: 0 auto;
 }
 
-/* Modals Row - Updated to keep all modals in one row */
+/* Updated Modals Section */
+.modals-container {
+  position: relative;
+  margin: 60px 0 80px;
+}
+
 .modals-row {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  margin: 60px 0;
   overflow-x: auto;
-  padding-bottom: 20px;
+  gap: 30px;
+  padding: 30px 10px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+}
+
+.modals-row:active {
+  cursor: grabbing;
+}
+
+.modals-row::-webkit-scrollbar {
+  display: none;
 }
 
 .modal-card {
-  flex: 1;
-  min-width: 250px;
+  flex: 0 0 300px;
+  scroll-snap-align: start;
   background: white;
   padding: 30px;
   border-radius: 8px;
@@ -213,6 +244,42 @@ export default {
   font-size: 1rem;
   color: #555;
 }
+
+/* Scroll Indicators */
+.scroll-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: #00b489;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  font-weight: bold;
+  font-size: 1.5rem;
+  border: none;
+  opacity: 0;
+  transition: all 0.3s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modals-container:hover .scroll-indicator {
+  opacity: 1;
+}
+
+.scroll-left {
+  left: -25px;
+}
+
+.scroll-right {
+  right: -25px;
+}
+
 /* Loading State */
 .loading-screen {
   display: flex;
@@ -240,11 +307,6 @@ export default {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-  .modals-row {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
   .modal-card {
     min-width: calc(50% - 20px);
   }
@@ -274,7 +336,27 @@ export default {
   }
   
   .modal-card {
-    min-width: 100%;
+    min-width: 280px;
+  }
+  
+  .scroll-indicator {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .scroll-left {
+    left: -15px;
+  }
+  
+  .scroll-right {
+    right: -15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-card {
+    min-width: 260px;
   }
 }
 </style>

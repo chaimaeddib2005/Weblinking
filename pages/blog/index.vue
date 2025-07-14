@@ -12,9 +12,9 @@ const error = ref(null)
 // Fetch all posts once
 const fetchAllPosts = async () => {
   try {
-    const response = await $fetch('https://www.weblinking.ma/wp-json/wp/v2/posts', {
+    const response = await $fetch('https://web.weblinking.fr/wp-json/wp/v2/posts', {
       params: {
-        per_page: 100, // fetch maximum
+        per_page: 100,
         _embed: true
       }
     })
@@ -27,8 +27,12 @@ const fetchAllPosts = async () => {
 
 fetchAllPosts()
 
-// Strip HTML tags
-const stripHtml = (html) => html.replace(/<[^>]*>?/gm, '')
+// ✅ Strip HTML tags and decode HTML entities
+const stripHtml = (html) => {
+  const tmp = document.createElement('div')
+  tmp.innerHTML = html.replace(/<[^>]*>?/gm, '')
+  return tmp.textContent || tmp.innerText || ''
+}
 
 // Extract available month-year values
 const availableDates = computed(() => {
@@ -73,7 +77,8 @@ watch([selectedDate, keyword], () => {
 </script>
 
 <template>
-    <Header />
+  <Header />
+
   <section class="max-w-7xl mx-auto px-4 py-12">
     <h1 class="text-4xl font-bold mb-6 text-center">Notre Blog</h1>
 
@@ -118,10 +123,11 @@ watch([selectedDate, keyword], () => {
       </div>
 
       <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mb-10">
-        <div
+        <NuxtLink
           v-for="post in paginatedPosts"
           :key="post.id"
-          class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col"
+          :to="`/blog/${post.slug}`"
+          class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col cursor-pointer"
         >
           <img
             v-if="post._embedded?.['wp:featuredmedia']"
@@ -134,14 +140,11 @@ watch([selectedDate, keyword], () => {
             <p class="text-sm text-gray-600 mb-4 line-clamp-3">
               {{ stripHtml(post.excerpt.rendered) }}
             </p>
-            <NuxtLink
-              :to="`/blog/${post.slug}`"
-              class="text-blue-600 mt-auto text-sm font-medium hover:underline"
-            >
+            <span class="text-blue-600 mt-auto text-sm font-medium hover:underline">
               Lire l’article →
-            </NuxtLink>
+            </span>
           </div>
-        </div>
+        </NuxtLink>
       </div>
 
       <!-- Pagination -->
@@ -166,6 +169,7 @@ watch([selectedDate, keyword], () => {
       </div>
     </div>
   </section>
+
   <Footer />
 </template>
 

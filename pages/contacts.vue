@@ -7,15 +7,15 @@
         <h1 class="contact-title">Contactez nous</h1>
         <div class="contact-info">
           <div class="contact-item">
-            <i class="fas fa-phone contact-icon"></i>
+            <i class="fas fa-phone "></i>
             <a :href="`tel:${content.phone_number}`">Tél: +{{ content.phone_number }}</a>
           </div>
           <div class="contact-item">
-            <i class="fas fa-envelope contact-icon"></i>
+            <i class="fas fa-envelope"></i>
             <a :href="`mailto:${content.email}`">{{ content.email }}</a>
           </div>
           <div class="contact-item">
-            <i class="fas fa-map-marker-alt contact-icon"></i>
+            <i class="fas fa-map-marker-alt"></i>
             <a
               :href="`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(content.address)}`"
               target="_blank"
@@ -44,11 +44,14 @@
       <div class="loader"></div>
       <p>Loading content...</p>
     </main>
-
-
   </div>
-      <Feedback />
-    <Footer />
+
+  <!-- Feedback placed outside main container for full width -->
+  <div class="feedback-container">
+    <Feedback />
+  </div>
+  
+  <Footer />
 </template>
 
 <script lang="js">
@@ -67,11 +70,6 @@ export default {
 </script>
 
 <style scoped>
-.contact-container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1.5rem;
-}
 
 .contact-content {
   background: white;
@@ -111,14 +109,14 @@ export default {
   font-size: 1.1rem;
   color: #4a5568;
 }
-
-.contact-icon {
-  color: #4299e1;
-  font-size: 1.5rem;
-  width: 40px;
-  text-align: center;
-  margin-right: 1rem;
+.contact-item i {
+  margin-right: 0.5rem;
+  color: #2c5282;
+  font-size: 1.2rem;
 }
+
+
+
 
 .contact-item a {
   color: #2b6cb0;
@@ -160,6 +158,13 @@ export default {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Feedback Container - Full Width */
+.feedback-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* Responsive Design */

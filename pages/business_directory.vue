@@ -142,6 +142,8 @@ export default {
   align-items: center;
   gap: 3rem;
   margin-bottom: 4rem;
+  
+  border-bottom: #2d3748 1px solid;
 }
 
 .block-text {
@@ -159,13 +161,13 @@ export default {
   font-size: 1.1rem;
   color: #4a5568;
   line-height: 1.7;
+
 }
 
 .block-image {
   flex: 1;
   max-width: 50%;
   border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 

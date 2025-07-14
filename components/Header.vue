@@ -8,44 +8,44 @@
 
         <nav class="nav-items">
           <!-- Desktop Navigation -->
-          <div class="dropdown">
-            <select @change="navigate" class="nav-select">
-              <option disabled selected>Création site</option>
-              <option value="/site_web_vitrine">Site web vitrine</option>
-              <option value="/site_web_ecommerce">Site web e-commerce</option>
-              <option value="/site_web_mobile">Site web mobile</option>
-              <option value="/site_web_one_page">Site web one page</option>
-              <option value="/blog_pro">Création de blogs professionnal</option>
-            </select>
+          <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
+            <div class="dropdown-title">Création site</div>
+            <div class="dropdown-content">
+              <NuxtLink to="/site_web_vitrine" class="dropdown-link">Site web vitrine</NuxtLink>
+              <NuxtLink to="/site_web_ecommerce" class="dropdown-link">Site web e-commerce</NuxtLink>
+              <NuxtLink to="/site_web_mobile" class="dropdown-link">Site web mobile</NuxtLink>
+              <NuxtLink to="/site_web_one_page" class="dropdown-link">Site web one page</NuxtLink>
+              <NuxtLink to="/blog_pro" class="dropdown-link">Création de blogs professionnal</NuxtLink>
+            </div>
           </div>
 
-          <div class="dropdown">
-            <select @change="navigate" class="nav-select">
-              <option selected disabled>Référencement</option>
-              <option value="/referencement_naturel">Référencement naturel</option>
-              <option value="/referencement_local">Référencement local</option>
-              <option value="/optimisation">Optimisation</option>
-            </select>
+          <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
+            <div class="dropdown-title">Référencement</div>
+            <div class="dropdown-content">
+              <NuxtLink to="/referencement_naturel" class="dropdown-link">Référencement naturel</NuxtLink>
+              <NuxtLink to="/referencement_local" class="dropdown-link">Référencement local</NuxtLink>
+              <NuxtLink to="/optimisation" class="dropdown-link">Optimisation</NuxtLink>
+            </div>
           </div>
 
-          <div class="dropdown">
-            <select @change="navigate" class="nav-select">
-              <option selected disabled>Maintenance</option>
-              <option value="/security_web">Sécurité web</option>
-              <option value="/qualite_site_web">Qualité site web</option>
-              <option value="/support_web">Support web</option>
-              <option value="/maintenance_web">Maintenance web</option>
-            </select>
+          <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
+            <div class="dropdown-title">Maintenance</div>
+            <div class="dropdown-content">
+              <NuxtLink to="/security_web" class="dropdown-link">Sécurité web</NuxtLink>
+              <NuxtLink to="/qualite_site_web" class="dropdown-link">Qualité site web</NuxtLink>
+              <NuxtLink to="/support_web" class="dropdown-link">Support web</NuxtLink>
+              <NuxtLink to="/maintenance_web" class="dropdown-link">Maintenance web</NuxtLink>
+            </div>
           </div>
 
-          <div class="dropdown">
-            <select @change="navigate" class="nav-select">
-              <option selected disabled>E-Marketing</option>
-              <option value="/business_directory">Business Directory</option>
-              <option value="/content_marketing">Content Marketing</option>
-              <option value="/search_engine_marketing">Search Engine Marketing</option>
-              <option value="/pay_per_click">Pay Per Click Management</option>
-            </select>
+          <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
+            <div class="dropdown-title">E-Marketing</div>
+            <div class="dropdown-content">
+              <NuxtLink to="/business_directory" class="dropdown-link">Business Directory</NuxtLink>
+              <NuxtLink to="/content_marketing" class="dropdown-link">Content Marketing</NuxtLink>
+              <NuxtLink to="/search_engine_marketing" class="dropdown-link">Search Engine Marketing</NuxtLink>
+              <NuxtLink to="/pay_per_click" class="dropdown-link">Pay Per Click Management</NuxtLink>
+            </div>
           </div>
 
           <NuxtLink to="/realisations" class="nav-link">Réalisations</NuxtLink>
@@ -127,6 +127,16 @@ function Home() {
 function toggleMenu() {
   menuOpen.value = !menuOpen.value
 }
+
+function showDropdown(event) {
+  const dropdown = event.currentTarget
+  dropdown.querySelector('.dropdown-content').style.display = 'block'
+}
+
+function hideDropdown(event) {
+  const dropdown = event.currentTarget
+  dropdown.querySelector('.dropdown-content').style.display = 'none'
+}
 </script>
 
 <style scoped>
@@ -183,29 +193,50 @@ function toggleMenu() {
   align-items: center;
 }
 
-.nav-select {
-  background-color: transparent;
+.dropdown-title {
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
   padding: 10px 15px;
-  font-size: 0.9rem;
+  border-radius: 6px;
   cursor: pointer;
-  appearance: none;
   transition: all 0.3s ease;
-  min-width: 150px;
+  white-space: nowrap;
+  font-size: 0.9rem;
   height: 40px;
+  display: flex;
+  align-items: center;
 }
 
-.nav-select:hover {
-  border-color: rgba(255, 255, 255, 0.6);
-  background-color: rgba(255, 255, 255, 0.05);
+.dropdown-title:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.nav-select:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2c3e50;
+  min-width: 200px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 0 0 6px 6px;
+  overflow: hidden;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-link {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .nav-link {
@@ -252,6 +283,7 @@ function toggleMenu() {
 
 .mobile-dropdown {
   width: 100%;
+  position: relative;
 }
 
 .mobile-nav-select {
@@ -279,28 +311,6 @@ function toggleMenu() {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.dropdown::after {
-  content: "▼";
-  font-size: 0.6rem;
-  color: white;
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.mobile-dropdown::after {
-  content: "▼";
-  font-size: 0.6rem;
-  color: white;
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
 /* Responsive Styles */
 @media (max-width: 1024px) {
   .nav-items {
@@ -323,38 +333,29 @@ function toggleMenu() {
     display: none;
   }
 }
-/* Style for the select dropdown options */
-.nav-select option {
-  background-color: #2c3e50; /* Same as header background */
-  color: white;
-  padding: 10px;
-}
 
+/* Style for the select dropdown options */
 .mobile-nav-select option {
-  background-color: #34495e; /* Same as mobile menu background */
+  background-color: #34495e;
   color: white;
   padding: 10px;
 }
 
 /* Additional fix for Firefox */
-.nav-select,
 .mobile-nav-select {
   color: white;
 }
 
-.nav-select option:checked,
 .mobile-nav-select option:checked {
-  background-color: #3498db; /* Highlight color for selected option */
+  background-color: #3498db;
 }
 
 /* For Chrome/Safari */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-  .nav-select,
   .mobile-nav-select {
     color: white;
   }
   
-  .nav-select option,
   .mobile-nav-select option {
     background-color: #2c3e50;
     color: white;
@@ -363,12 +364,10 @@ function toggleMenu() {
 
 /* For IE */
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  .nav-select,
   .mobile-nav-select {
     color: white;
   }
   
-  .nav-select option,
   .mobile-nav-select option {
     background-color: #2c3e50;
     color: white;

@@ -77,11 +77,10 @@ export default {
 }
 
 .service-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 2rem;
-  font-weight: 600;
-  color: var(--brown-dark);
-  margin-bottom: 15px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a365d;
+  margin-bottom: 20px;
 }
 
 .top-para-text {
@@ -124,7 +123,6 @@ export default {
 .block-image {
   width: 100%;
   border-radius: 6px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease;
   order: 1;
 }

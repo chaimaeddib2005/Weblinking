@@ -58,7 +58,7 @@
 
 <style scoped>
 .footer {
-    background-color: #363535;
+    background-color: #2c3e50;
     color: white;
     padding: 2rem;
     font-family: Arial, sans-serif;

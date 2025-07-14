@@ -110,7 +110,7 @@ export default{
 .main-title {
     font-size: 2.8rem;
     font-weight: 700;
-    color: #2d3748;
+    color: #2c3e50;
     margin-bottom: 1rem;
     position: relative;
 }
@@ -199,7 +199,6 @@ export default{
     flex: 1;
     max-width: 45%;
     border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
 }
 

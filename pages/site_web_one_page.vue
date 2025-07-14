@@ -91,7 +91,7 @@ export default {
   margin: 5rem 0;
   padding: 2rem;
   border-radius: 12px;
-  background-color: white;
+  background-color: #f7fafc;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 

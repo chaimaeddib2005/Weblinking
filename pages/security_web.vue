@@ -99,13 +99,14 @@ export default {
   flex-direction: column;
   gap: 30px;
   margin-bottom: 80px;
+  background: #f7fafc;
+  padding: 40px;
 }
 
 .block-image {
   width: 100%;
   height: auto;
   border-radius: 8px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 

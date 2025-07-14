@@ -83,10 +83,10 @@ export default {
 }
 
 .service-title {
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: darkblue;
-  margin-bottom: 15px;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a365d;
+  margin-bottom: 20px;
 }
 
 .service-subtitle {
@@ -108,6 +108,8 @@ export default {
   display: flex;
   align-items: center;
   gap: 40px;
+  background-color: #f7f7f7;
+  padding: 40px;
 }
 
 .block-content {

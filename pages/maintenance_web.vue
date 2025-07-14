@@ -166,7 +166,6 @@ export default {
     flex: 1;
     max-width: 50%;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
 }
 

@@ -43,13 +43,17 @@
         <p class="middle-para-text">{{ content.middle_paragraph.content }}</p>
       </section>
 
-      <!-- Compact Modals in Single Row -->
+      <!-- Compact Modals in Single Row with Navigation -->
       <section class="modals-section">
-        <div class="modals-row">
-          <div v-for="(modal,index) in modals" :key="index" class="modal-card">
-            <img :src="modal.icon" alt="Modal icon" class="modal-icon">
-            <p class="modal-text">{{ modal.description }}</p>
+        <div class="modals-container">
+          <div class="scroll-indicator scroll-left" @click="scrollModals(-300)">←</div>
+          <div class="modals-row">
+            <div v-for="(modal,index) in modals" :key="index" class="modal-card">
+              <img :src="modal.icon" alt="Modal icon" class="modal-icon">
+              <p class="modal-text">{{ modal.description }}</p>
+            </div>
           </div>
+          <div class="scroll-indicator scroll-right" @click="scrollModals(300)">→</div>
         </div>
       </section>
 
@@ -83,6 +87,17 @@ export default {
         if(this.content[key].description) {
           this.modals.push(this.content[key]);
         }
+      }
+    }
+  },
+  methods: {
+    scrollModals(offset) {
+      const modalsEl = this.$el.querySelector('.modals-row');
+      if (modalsEl) {
+        modalsEl.scrollBy({
+          left: offset,
+          behavior: 'smooth'
+        });
       }
     }
   }
@@ -130,6 +145,9 @@ export default {
   align-items: center;
   gap: 60px;
   margin-bottom: 80px;
+  padding: 20px;
+  background: #f7fafc;
+  border-radius: 8px;
 }
 
 .block-odd {
@@ -184,24 +202,36 @@ export default {
   text-align: center;
 }
 
-/* Compact Modals in Single Row */
+/* Modals Section with Navigation */
 .modals-section {
   margin: 60px 0;
-  align-content: center;
-  overflow-x: auto;
-  padding-bottom: 20px;
+}
+
+.modals-container {
+  position: relative;
+  margin: 0 auto;
+  max-width: 100%;
 }
 
 .modals-row {
   display: flex;
   gap: 20px;
-  flex-wrap: nowrap;
-  min-width: fit-content;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 20px 0;
+  margin: 0 50px;
+}
+
+.modals-row::-webkit-scrollbar {
+  display: none;
 }
 
 .modal-card {
   flex: 0 0 auto;
   width: 180px;
+  scroll-snap-align: start;
   background: white;
   border-radius: 8px;
   padding: 20px;
@@ -229,7 +259,43 @@ export default {
   margin: 0;
 }
 
-/* Loading State (unchanged as requested) */
+/* Navigation Arrows */
+.scroll-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: #00b489;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: none;
+  opacity: 0.8;
+  transition: all 0.3s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-indicator:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.scroll-left {
+  left: 0;
+}
+
+.scroll-right {
+  right: 0;
+}
+
+/* Loading State */
 .loading-screen {
   display: flex;
   flex-direction: column;
@@ -283,6 +349,12 @@ export default {
   .modal-icon {
     width: 32px;
     height: 32px;
+  }
+
+  .scroll-indicator {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
   }
 }
 </style>

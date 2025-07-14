@@ -28,7 +28,7 @@
     
   </div>
   <Feedback />
-    <Footer />
+  <Footer />
 </template>
 
 <script lang="js">
@@ -85,6 +85,7 @@ export default {
   margin-bottom: 20px;
 }
 
+
 .paragraph-text {
   font-size: 1.1rem;
   line-height: 1.8;
@@ -135,24 +136,35 @@ export default {
   line-height: 1.6;
   color: #4a5568;
 }
-/* Loading State */
+
+/* Loading State - Updated to match previous pages */
 .loading-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 50vh;
-  color: #4a5568;
+  min-height: 70vh;
+  color: #2c3e50;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 20px 0;
+  padding: 40px;
 }
 
 .loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4299e1;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #00b489; /* Using the teal accent color */
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.loading-screen p {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #2c3e50;
 }
 
 @keyframes spin {
@@ -177,6 +189,17 @@ export default {
   
   .feature-card {
     padding: 20px;
+  }
+
+  .loading-screen {
+    min-height: 50vh;
+    padding: 30px;
+  }
+
+  .loader {
+    width: 50px;
+    height: 50px;
+    border-width: 4px;
   }
 }
 </style>

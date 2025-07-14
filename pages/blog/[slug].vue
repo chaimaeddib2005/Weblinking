@@ -53,7 +53,6 @@ const post = computed(() => posts?.value?.[0] || null)
       ></article>
     </div>
   </section>
-  <comment />
   <Footer />
 </template>
 

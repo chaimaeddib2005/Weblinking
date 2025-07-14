@@ -7,7 +7,14 @@
         <p class="description">{{ content.description }}</p>
         <h1>{{ content.titre }}</h1>
         <p class="subtitle">{{ content.titre_copier }}</p>
-        <div class="phone">tél: +{{ this.phone_number }}</div>
+        <a 
+        class="fixed-contact-button whatsapp-button"
+        style="width:fit-content"
+        :href="`tel:${phone_number}`"
+        aria-label="Appelez-nous"
+      >
+          Tél: +{{ phone_number  }}
+      </a>
       </div>
       <div class="hero-image">
         <img :src="content.top_image" alt="Hero Image">
@@ -70,19 +77,19 @@
     <div class="stats">
       <div class="stat">
         <div class="stat-name">{{ content.stats.nom }}</div>
-        <div class="stat-value">{{ content.stats.percentage }}</div>
+        <div class="stat-value">{{ content.stats.percentage }} % </div>
       </div>
       <div class="stat">
         <div class="stat-name">{{ content.stats_copier.nom }}</div>
-        <div class="stat-value">{{ content.stats_copier.percentage }}</div>            
+        <div class="stat-value">{{ content.stats_copier.percentage }} %</div>            
       </div>
       <div class="stat">
         <div class="stat-name">{{ content.stats_copier2.nom }}</div>
-        <div class="stat-value">{{ content.stats_copier2.percentage }}</div>
+        <div class="stat-value">{{ content.stats_copier2.percentage }}%</div>
       </div>
       <div class="stat">
         <div class="stat-name">{{ content.stats_copier3.nom }}</div>
-        <div class="stat-value">{{ content.stats_copier3.percentage }}</div>
+        <div class="stat-value">{{ content.stats_copier3.percentage }} h</div>
       </div> 
       
     </div>
@@ -233,16 +240,15 @@ export default {
 }
 .contact-section{
   text-align: center;
-  margin: 60px 0;
-  background-color: rgba(136, 52, 52, 0.553) ;
+  background-color:  #2c3e50 ;
   padding: 0.5vw;
+  border-radius: 8px;
 }
 .hero-image img {
   max-height: 400px;
   max-width: 100%;
   object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .description {
@@ -255,14 +261,14 @@ export default {
 h1 {
   font-size: 2.8rem;
   margin: 0 0 15px 0;
-  color: #1a5276;
+  color: #2c3e50;
   font-weight: 700;
   line-height: 1.2;
 }
 
 .subtitle {
   font-size: 1.4rem;
-  color: #3498db;
+  color: #00b489;
   margin: 25px 0;
   font-weight: 500;
 }
@@ -361,7 +367,7 @@ h1 {
   transform: translateY(-50%);
   width: 50px;
   height: 50px;
-  background: rgba(52, 152, 219, 0.9);
+  background: #00b489;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -391,7 +397,7 @@ h1 {
 
 /* Button Styles */
 button {
-  background-color: #3498db;
+  background-color: #00b489;
   color: white;
   border: none;
   padding: 14px 30px;
@@ -405,7 +411,7 @@ button {
 }
 
 button:hover {
-  background-color: #2980b9;
+  background-color: #128C7E;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -553,7 +559,7 @@ button:hover {
 .stat-value {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #3498db;
+  color: #128C7E;
 }
 
 /* Partenaires Section */

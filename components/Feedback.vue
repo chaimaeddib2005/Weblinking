@@ -3,7 +3,6 @@
     <div class="content-wrapper">
       <div class="text-section">
         <h1>On est à votre écoute</h1>
-
         <p class="description">
           La satisfaction de nos clients est notre but majeur. Si vous souhaitez commencer un projet mais vous avez besoin d'aide, alors détendez-vous, nous serons à votre côté pour vous présenter tout accompagnement, conseils et solutions pour réussir votre projet. Nous avons pu gagner, au fil du temps, l'expérience et la confiance d'un grand nombre d'entreprises qui sont tout à fait satisfaites par notre collaboration.
         </p>
@@ -14,55 +13,49 @@
           <div class="form-row">
             <div class="form-group">
               <label for="name">Votre nom</label>
-              <input 
-                type="text" 
-                id="name" 
-                v-model="formData.name" 
-                required
-              >
+              <input type="text" id="name" v-model="formData.name" required>
             </div>
-            
+
             <div class="form-group">
               <label for="email">Votre Email</label>
-              <input 
-                type="email" 
-                id="email" 
-                v-model="formData.email" 
-                required
-              >
+              <input type="email" id="email" v-model="formData.email" required>
             </div>
           </div>
-          
+
           <div class="form-row">
             <div class="form-group">
               <label for="phone">Téléphone</label>
-              <input 
-                type="tel" 
-                id="phone" 
-                v-model="formData.phone"
-              >
+              <input type="tel" id="phone" v-model="formData.phone">
             </div>
-            
+
             <div class="form-group">
               <label for="subject">Objet</label>
-              <input 
-                type="text" 
-                id="subject" 
-                v-model="formData.subject"
-              >
+              <input type="text" id="subject" v-model="formData.subject">
             </div>
           </div>
-          
+
           <div class="form-group full-width">
             <label for="message">Votre Message</label>
-            <textarea 
-              id="message" 
-              v-model="formData.message" 
-              required
-            ></textarea>
+            <textarea id="message" v-model="formData.message" required></textarea>
           </div>
-          
-          <button type="submit" class="submit-btn">
+
+          <!-- Accept Privacy Checkbox -->
+          <div class="form-group full-width checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" v-model="acceptPrivacy" required>
+              <span>
+                En soumettant ce formulaire, j’accepte que mes informations soient utilisées par ce site.
+              </span>
+            </label>
+          </div>
+
+          <!-- reCAPTCHA v2 Checkbox -->
+          <div class="form-group full-width">
+            <div ref="recaptcha" class="g-recaptcha"></div>
+            <div v-if="recaptchaError" class="error-message">{{ recaptchaError }}</div>
+          </div>
+
+          <button type="submit" class="submit-btn" :disabled="isSubmitting">
             ENVOYER VOTRE MESSAGE
           </button>
         </form>
@@ -82,49 +75,112 @@ export default {
         phone: '',
         subject: '',
         message: ''
-      }
-    }
+      },
+      recaptchaSiteKey: '6Lfho4IrAAAAAEv4Q_diU3hKviyP-OdjdGPIaXXt',
+      recaptchaToken: '',
+      recaptchaError: '',
+      isSubmitting: false,
+      acceptPrivacy: false
+    };
+  },
+  mounted() {
+    this.renderRecaptcha();
   },
   methods: {
+    renderRecaptcha() {
+      if (window.grecaptcha) {
+        window.grecaptcha.render(this.$refs.recaptcha, {
+          sitekey: this.recaptchaSiteKey,
+          callback: this.onVerify,
+          'expired-callback': this.onExpired,
+          'error-callback': this.onError
+        });
+      } else {
+        const script = document.createElement('script');
+        script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+        script.async = true;
+        script.defer = true;
+        script.onload = this.renderRecaptcha;
+        document.head.appendChild(script);
+      }
+    },
+
+    onVerify(token) {
+      this.recaptchaToken = token;
+      this.recaptchaError = '';
+    },
+
+    onExpired() {
+      this.recaptchaToken = '';
+      this.recaptchaError = 'La vérification CAPTCHA a expiré. Veuillez la renouveler.';
+    },
+
+    onError() {
+      this.recaptchaToken = '';
+      this.recaptchaError = 'Erreur lors de la vérification CAPTCHA.';
+    },
+
     async handleSubmit() {
+      if (!this.acceptPrivacy) {
+        alert("Vous devez accepter le traitement de vos informations.");
+        return;
+      }
+
+      if (!this.recaptchaToken) {
+        this.recaptchaError = 'Veuillez compléter la vérification CAPTCHA.';
+        return;
+      }
+
+      this.isSubmitting = true;
+
       try {
         const response = await fetch('https://web.weblinking.fr/wp-json/custom-contact/v1/send', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(this.formData)
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...this.formData,
+            token: this.recaptchaToken
+          })
         });
 
         const data = await response.json();
 
         if (data.success) {
-          this.formData = {
-            name: '',
-            email: '',
-            phone: '',
-            subject: '',
-            message: ''
-          };
+          this.resetForm();
           alert('Merci pour votre message! Nous vous contacterons bientôt.');
         } else {
-          console.error('Erreur:', data.message);
-          alert("Une erreur s'est produite: " + data.message);
+          this.recaptchaError = data.message || 'Une erreur est survenue.';
         }
-
       } catch (error) {
-        console.error('Échec de l\'envoi:', error);
-        alert("Désolé, une erreur s'est produite. Veuillez réessayer plus tard.");
+        console.error('Erreur:', error);
+        this.recaptchaError = 'Erreur réseau. Veuillez réessayer plus tard.';
+      } finally {
+        this.isSubmitting = false;
+      }
+    },
+
+    resetForm() {
+      this.formData = {
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      };
+      this.recaptchaToken = '';
+      this.recaptchaError = '';
+      this.acceptPrivacy = false;
+      if (window.grecaptcha) {
+        window.grecaptcha.reset();
       }
     }
   }
-}
+};
 </script>
-
 
 <style scoped>
 .contact-container {
-  background-color: #1e88e5; /* Blue background */
+  background-color: #00b489;
   padding: 60px 20px;
   color: white;
 }
@@ -175,7 +231,7 @@ h1 {
 
 .form-group {
   flex: 1;
-  min-width: 0; /* Prevent flex items from overflowing */
+  min-width: 0;
 }
 
 .full-width {
@@ -207,7 +263,7 @@ textarea {
 }
 
 .submit-btn {
-  background-color: #1565c0;
+  background-color: #00b489;
   color: white;
   border: none;
   padding: 14px 20px;
@@ -222,7 +278,37 @@ textarea {
 }
 
 .submit-btn:hover {
-  background-color: #0d47a1;
+  background-color: #128C7E;
+}
+
+.error-message {
+  color: #ff4444;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.g-recaptcha {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.checkbox-group {
+  margin-top: 10px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  font-size: 0.95rem;
+  color: #2c3e50;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin-right: 10px;
+  margin-top: 4px;
+  transform: scale(1.2);
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {
@@ -230,11 +316,11 @@ textarea {
     flex-direction: column;
     gap: 0;
   }
-  
+
   .form-group {
     margin-bottom: 20px;
   }
-  
+
   .content-wrapper {
     flex-direction: column;
     gap: 30px;

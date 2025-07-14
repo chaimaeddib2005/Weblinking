@@ -1,6 +1,7 @@
 <template>
+  <Header />
   <div class="service-container">
-    <Header />
+    
     <main v-if="content" class="main-content">
       <!-- Hero Section -->
       <section class="hero">
@@ -21,7 +22,7 @@
         </div>
 
         <div class="content-block block-2">
-          <img :src="content.block_copier.image" alt="Image Block 2" class="block-image">
+          <img :src="content.block_copier2.image" alt="Image Block 2" class="block-image">
           <div class="text-content">
             <h2 class="block-title">{{ content.block_copier.titre }}</h2>
             <p class="block-text">{{ content.block_copier.texte }}</p>
@@ -29,7 +30,7 @@
         </div>
 
         <div class="content-block block-3">
-          <img :src="content.block_copier2.image" alt="Image Block 3" class="block-image">
+          <img :src="content.block_copier.image" alt="Image Block 3" class="block-image">
           <div class="text-content">
             <h2 class="block-title">{{ content.block_copier2.titre }}</h2>
             <p class="block-text">{{ content.block_copier2.texte }}</p>
@@ -56,9 +57,10 @@
       <p>Chargement du contenu...</p>
     </main>
 
-    <Feedback />
-    <Footer />
+    
   </div>
+  <Feedback />
+  <Footer />
 </template>
 
 <script lang="js">
@@ -117,14 +119,22 @@ export default {
   align-items: center;
   gap: 60px;
   margin-bottom: 80px;
+  padding: 20px;
+  border-radius: 8px;
 }
+
 
 .block-1, .block-4 {
   flex-direction: row;
 }
 
-.block-2, .block-3 {
+.block-3, .block-2{
+
   flex-direction: row-reverse;
+}
+.block-2, .block-4 {
+  
+  background-color: #f7fafc;
 }
 
 .text-content {
@@ -148,9 +158,7 @@ export default {
   flex: 1;
   max-width: 50%;
   height: auto;
-  border-radius: 8px;
   object-fit: cover;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 

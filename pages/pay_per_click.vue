@@ -173,7 +173,6 @@ export default{
     flex: 1;
     max-width: 45%;
     border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
 }
 
