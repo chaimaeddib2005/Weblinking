@@ -1,62 +1,117 @@
 <template>
     <Header />
-    <main v-if="content" class="main-content">
-        <div class="hero-section">
-            <h1 class="main-title">{{ content.titre_service }}</h1>
-            <h3 class="subtitle">{{ content.sous_titre }}</h3>
-        </div>
+    <div class="service-page">
+        <!-- Content when loaded -->
+        <main v-if="content" class="main-content">
+            <div class="hero-section">
+                <h1 class="main-title">{{ content.titre_service }}</h1>
+                <h3 class="subtitle">{{ content.sous_titre }}</h3>
+            </div>
 
-        <div class="content-block para1">
-            <p class="block-text">{{ content.block.texte }}</p>
-            <img class="block-image" :src="content.block.image" alt="Image Block 1" />
-        </div>
+            <div class="content-block para1">
+                <p class="block-text">{{ content.block.texte }}</p>
+                <img class="block-image" :src="content.block.image" alt="Image Block 1" />
+            </div>
 
-        <!-- Modern Gauge Section -->
-        <div class="modern-gauges">
-            <div class="gauge-row">
-                <div class="gauge-item" v-for="(stat, index) in stats" :key="index">
-                    <div class="gauge-wrapper">
-                        <div class="gauge-percentage">{{ stat.percentage }}%</div>
-                        <div class="gauge-container">
-                            <div class="gauge-bar" :style="{ width: stat.percentage + '%', background: getGradient(stat.percentage) }"></div>
+            <div class="modern-gauges">
+                <div class="gauge-row">
+                    <div class="gauge-item" v-for="(stat, index) in stats" :key="index">
+                        <div class="gauge-wrapper">
+                            <div class="gauge-percentage">{{ stat.percentage }}%</div>
+                            <div class="gauge-container">
+                                <div class="gauge-bar" :style="{ width: stat.percentage + '%', background: getGradient(stat.percentage) }"></div>
+                            </div>
                         </div>
+                        <div class="gauge-title">{{ stat.nom }}</div>
                     </div>
-                    <div class="gauge-title">{{ stat.nom }}</div>
                 </div>
             </div>
-        </div>
 
-        <div class="content-block para2">
-            <img class="block-image" :src="content.block_copier.image" alt="Image Block 2" />
-            <div class="text-content">
-                <h5 class="block-title">{{ content.block_copier.titre }}</h5>
-                <p class="block-text">{{ content.block_copier.texte }}</p>
-            </div>
-        </div>
-
-        <div class="middle-para centered-section">
-            <p class="section-text">{{ content.middle_paragraph.content }}</p>
-        </div>
-
-        <div class="modals-container">
-            <div class="modals">
-                <div class="modal" v-for="(modal,index) in modals" :key="index">
-                    <img :src="modal.icon" alt="Modal icon" class="modal-icon">
-                    <p class="modal-text">{{ modal.description }}</p>
+            <div class="content-block para2">
+                <img class="block-image" :src="content.block_copier.image" alt="Image Block 2" />
+                <div class="text-content">
+                    <h5 class="block-title">{{ content.block_copier.titre }}</h5>
+                    <p class="block-text">{{ content.block_copier.texte }}</p>
                 </div>
             </div>
-        </div>
 
-        <div class="bottom-para centered-section">
-            <p class="section-text">{{ content.buttom_paragraph.content }}</p>
-        </div>
-    </main>
+            <div class="middle-para centered-section">
+                <p class="section-text">{{ content.middle_paragraph.content }}</p>
+            </div>
 
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
-    </main>
+            <div class="modals-container">
+                <div class="modals">
+                    <div class="modal" v-for="(modal,index) in modals" :key="index">
+                        <img :src="modal.icon" alt="Modal icon" class="modal-icon">
+                        <p class="modal-text">{{ modal.description }}</p>
+                    </div>
+                </div>
+            </div>
 
+            <div class="bottom-para centered-section">
+                <p class="section-text">{{ content.buttom_paragraph.content }}</p>
+            </div>
+        </main>
+
+        <!-- Placeholder content -->
+        <main v-else class="content-placeholder">
+            <!-- Hero Placeholder -->
+            <div class="hero-section">
+                <h1 class="main-title"></h1>
+                <h3 class="subtitle"></h3>
+            </div>
+
+            <!-- Content Block 1 Placeholder -->
+            <div class="content-block para1">
+                <p class="block-text"></p>
+                <div class="block-image-placeholder"></div>
+            </div>
+
+            <!-- Gauge Placeholder -->
+            <div class="modern-gauges">
+                <div class="gauge-row">
+                    <div class="gauge-item" v-for="i in 4" :key="i">
+                        <div class="gauge-wrapper">
+                            <div class="gauge-percentage"></div>
+                            <div class="gauge-container">
+                                <div class="gauge-bar-placeholder"></div>
+                            </div>
+                        </div>
+                        <div class="gauge-title"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Block 2 Placeholder -->
+            <div class="content-block para2">
+                <div class="block-image-placeholder"></div>
+                <div class="text-content">
+                    <h5 class="block-title"></h5>
+                    <p class="block-text"></p>
+                </div>
+            </div>
+
+            <!-- Middle Paragraph Placeholder -->
+            <div class="middle-para centered-section">
+                <p class="section-text"></p>
+            </div>
+
+            <!-- Modals Placeholder -->
+            <div class="modals-container">
+                <div class="modals">
+                    <div class="modal" v-for="i in 3" :key="i">
+                        <div class="modal-icon-placeholder"></div>
+                        <p class="modal-text"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Paragraph Placeholder -->
+            <div class="bottom-para centered-section">
+                <p class="section-text"></p>
+            </div>
+        </main>
+    </div>
     <Feedback />
     <Footer />
 </template>
@@ -99,7 +154,7 @@ export default{
 </script>
 
 <style scoped>
-/* Base Styles */
+/* Original styles remain unchanged */
 .main-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -109,7 +164,6 @@ export default{
     line-height: 1.6;
 }
 
-/* Hero Section */
 .hero-section {
     text-align: center;
     padding: 3rem 0;
@@ -130,7 +184,6 @@ export default{
     margin-bottom: 1rem;
 }
 
-/* Content Blocks */
 .content-block {
     display: flex;
     align-items: center;
@@ -162,7 +215,6 @@ export default{
     margin-bottom: 1rem;
 }
 
-/* Centered Sections */
 .centered-section {
     text-align: center;
     max-width: 800px;
@@ -176,7 +228,6 @@ export default{
     line-height: 1.7;
 }
 
-/* Modals */
 .modals-container {
     background-color: #f8fafc;
     padding: 3rem 0;
@@ -223,7 +274,6 @@ export default{
     line-height: 1.6;
 }
 
-/* Modern Gauge Styles (preserved) */
 .modern-gauges {
     padding: 3rem 1rem;
     margin: 2rem auto;
@@ -284,92 +334,143 @@ export default{
     margin-top: 0.5rem;
 }
 
-/* Loading State (preserved) */
-.loading-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 50vh;
-    color: #4a5568;
+/* Placeholder Styles */
+.content-placeholder .main-title,
+.content-placeholder .subtitle,
+.content-placeholder .block-text,
+.content-placeholder .block-title,
+.content-placeholder .section-text,
+.content-placeholder .modal-text,
+.content-placeholder .gauge-title,
+.content-placeholder .gauge-percentage {
+    background-color: #f3f3f3;
+    color: transparent;
+    position: relative;
+    overflow: hidden;
 }
 
-.loader {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #4299e1;
+.content-placeholder .main-title {
+    height: 2.8rem;
+    width: 60%;
+    margin: 0 auto 1rem;
+}
+
+.content-placeholder .subtitle {
+    height: 1.5rem;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.content-placeholder .block-text {
+    height: 4.5rem;
+}
+
+.content-placeholder .block-title {
+    height: 1.6rem;
+    width: 50%;
+    margin-bottom: 1rem;
+}
+
+.content-placeholder .section-text,
+.content-placeholder .modal-text {
+    height: 1.2rem;
+}
+
+.content-placeholder .gauge-percentage {
+    height: 2.2rem;
+    width: 50%;
+    margin: 0 auto 0.3rem;
+}
+
+.content-placeholder .gauge-title {
+    height: 1.1rem;
+    width: 70%;
+    margin: 0.5rem auto 0;
+}
+
+.content-placeholder .block-image-placeholder {
+    height: 300px;
+    width: 100%;
+    background-color: #f3f3f3;
+    border-radius: 12px;
+}
+
+.content-placeholder .gauge-bar-placeholder {
+    height: 100%;
+    width: 100%;
+    background-color: #f3f3f3;
+    border-radius: 4px;
+}
+
+.content-placeholder .modal-icon-placeholder {
+    width: 70px;
+    height: 70px;
+    background-color: #f3f3f3;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
     margin-bottom: 1.5rem;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* Animation */
+@keyframes placeholderShimmer {
+    0% { background-position: -468px 0 }
+    100% { background-position: 468px 0 }
 }
 
-/* Responsive Adjustments */
+.content-placeholder .main-title,
+.content-placeholder .subtitle,
+.content-placeholder .block-text,
+.content-placeholder .block-title,
+.content-placeholder .section-text,
+.content-placeholder .modal-text,
+.content-placeholder .gauge-title,
+.content-placeholder .gauge-percentage,
+.content-placeholder .block-image-placeholder,
+.content-placeholder .gauge-bar-placeholder,
+.content-placeholder .modal-icon-placeholder {
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeholderShimmer;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #f3f3f3 8%, #ececec 18%, #f3f3f3 33%);
+    background-size: 800px 104px;
+    position: relative;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .main-title {
-        font-size: 2.2rem;
+    .content-placeholder .main-title {
+        height: 2.2rem;
     }
     
-    .subtitle {
-        font-size: 1.3rem;
+    .content-placeholder .subtitle {
+        height: 1.3rem;
     }
     
-    .content-block {
-        flex-direction: column;
-        gap: 1.5rem;
+    .content-placeholder .block-image-placeholder {
+        height: 200px;
     }
     
-    .block-image {
-        max-width: 100%;
-        order: -1;
-    }
-    
-    .gauge-row {
-        gap: 1.5rem;
-    }
-    
-    .gauge-item {
-        min-width: 140px;
-    }
-    
-    .gauge-percentage {
-        font-size: 1.8rem;
-    }
-    
-    .modal {
-        min-width: 160px;
-        padding: 1.5rem 1rem;
+    .content-placeholder .block-text {
+        height: 3.5rem;
     }
 }
 
 @media (max-width: 480px) {
-    .main-content {
-        padding: 0 1rem 2rem;
+    .content-placeholder .main-title {
+        width: 80%;
     }
     
-    .main-title {
-        font-size: 1.8rem;
+    .content-placeholder .subtitle {
+        width: 90%;
     }
     
-    .gauge-row {
-        flex-direction: column;
-        align-items: center;
-        gap: 2rem;
+    .content-placeholder .block-text {
+        height: 2.5rem;
     }
     
-    .gauge-item {
-        width: 100%;
-        max-width: 220px;
-    }
-    
-    .modal {
-        min-width: 100%;
-        max-width: 100%;
+    .content-placeholder .gauge-percentage {
+        height: 1.8rem;
     }
 }
 </style>

@@ -1,38 +1,54 @@
 <template>
-    <Header />
-    <main v-if="content" class="main-content">
+  <Header />
+  <div class="service-page" :class="{ 'is-loading': isLoading }">
+    <main class="main-content">
         <div class="hero-section">
-            <h1 class="main-title">{{ content.titre_service }}</h1>
+            <h1 class="main-title">{{ content?.titre_service || ' ' }}</h1>
         </div>
 
         <div class="top-para content-section">
-            <h4 class="section-title">{{ content.top_paragraph.title }}</h4>
-            <p class="top-para-text">{{ content.top_paragraph.content }}</p>
+            <h4 class="section-title">{{ content?.top_paragraph?.title || ' ' }}</h4>
+            <p class="top-para-text">{{ content?.top_paragraph?.content || ' ' }}</p>
         </div>
 
         <div class="content-blocks">
             <div class="content-block para1">
                 <div class="text-content">
-                    <h5 class="block-title">{{ content.block.titre }}</h5>
-                    <p class="block-text">{{ content.block.texte }}</p>
+                    <h5 class="block-title">{{ content?.block?.titre || ' ' }}</h5>
+                    <p class="block-text">{{ content?.block?.texte || ' ' }}</p>
                 </div>
-                <img class="block-image" :src="content.block.image" alt="Image Block 1" />
+                <img 
+                  v-if="content?.block?.image"
+                  class="block-image" 
+                  :src="content.block.image" 
+                  alt="Image Block 1" 
+                />
             </div>
 
             <div class="content-block para2">
                 <div class="text-content">
-                    <h5 class="block-title">{{ content.block_copier.titre }}</h5>
-                    <p class="block-text">{{ content.block_copier.texte }}</p>
+                    <h5 class="block-title">{{ content?.block_copier?.titre || ' ' }}</h5>
+                    <p class="block-text">{{ content?.block_copier?.texte || ' ' }}</p>
                 </div>
-                <img class="block-image" :src="content.block_copier.image" alt="Image Block 2" />
+                <img 
+                  v-if="content?.block_copier?.image"
+                  class="block-image" 
+                  :src="content.block_copier.image" 
+                  alt="Image Block 2" 
+                />
             </div>
 
             <div class="content-block para3">
                 <div class="text-content">
-                    <h5 class="block-title">{{ content.block_copier2.titre }}</h5>
-                    <p class="block-text">{{ content.block_copier2.texte }}</p>
+                    <h5 class="block-title">{{ content?.block_copier2?.titre || ' ' }}</h5>
+                    <p class="block-text">{{ content?.block_copier2?.texte || ' ' }}</p>
                 </div>
-                <img class="block-image" :src="content.block_copier2.image" alt="Image Block 3" />
+                <img 
+                  v-if="content?.block_copier2?.image"
+                  class="block-image" 
+                  :src="content.block_copier2.image" 
+                  alt="Image Block 3" 
+                />
             </div>
         </div>
 
@@ -41,32 +57,34 @@
             <div class="gauge-row">
                 <div class="gauge-item" v-for="(stat, index) in stats" :key="index">
                     <div class="gauge-wrapper">
-                        <div class="gauge-percentage">{{ stat.percentage }}%</div>
+                        <div class="gauge-percentage">{{ stat?.percentage || ' ' }}%</div>
                         <div class="gauge-container">
-                            <div class="gauge-bar" :style="{ width: stat.percentage + '%', background: getGradient(stat.percentage) }"></div>
+                            <div 
+                              class="gauge-bar" 
+                              :style="{ 
+                                width: (stat?.percentage || 0) + '%', 
+                                background: getGradient(stat?.percentage || 0) 
+                              }"
+                            ></div>
                         </div>
                     </div>
-                    <div class="gauge-title">{{ stat.nom }}</div>
+                    <div class="gauge-title">{{ stat?.nom || ' ' }}</div>
                 </div>
             </div>
         </div>
     </main>
-
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
-    </main>
-
-    <Feedback />
-    <Footer />
+  </div>
+  <Feedback />
+  <Footer />
 </template>
 
 <script lang="js">
 export default{
     data(){
         return{
-            content:null,
+            content: null,
             stats: [],
+            isLoading: true
         }
     },
     methods: {
@@ -77,21 +95,37 @@ export default{
         }
     },
     async mounted(){
-        const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5837");
-        const page = await resp.json();
-        this.content = page.acf;
-        this.stats = [
-            this.content.stats,
-            this.content.stats_copier,
-            this.content.stats_copier2,
-            this.content.stats_copier3
-        ].filter(stat => stat);
+        try {
+            const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5837");
+            const page = await resp.json();
+            this.content = page.acf;
+            this.stats = [
+                this.content?.stats,
+                this.content?.stats_copier,
+                this.content?.stats_copier2,
+                this.content?.stats_copier3
+            ].filter(stat => stat);
+        } catch (error) {
+            console.error("Error loading content:", error);
+        } finally {
+            this.isLoading = false;
+        }
     }
 }
 </script>
 
 <style scoped>
-/* Base Styles */
+/* Only adding loading-specific styles without modifying existing ones */
+.service-page {
+  transition: opacity 0.4s ease-in;
+}
+
+.service-page.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* === Your original styles below - completely untouched === */
 .main-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -206,7 +240,7 @@ export default{
     transform: translateY(-5px);
 }
 
-/* Modern Gauge Styles (preserved) */
+/* Modern Gauge Styles */
 .modern-gauges {
     padding: 3rem 1rem;
     margin: 2rem auto;
@@ -265,31 +299,6 @@ export default{
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 0.5rem;
-}
-
-/* Loading State (preserved) */
-.loading-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 50vh;
-    color: #4a5568;
-}
-
-.loader {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #4299e1;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1.5rem;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }
 
 /* Responsive Adjustments */

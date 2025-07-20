@@ -1,71 +1,87 @@
 <template>
   <Header />
-  <div class="service-page">
-    <main v-if="content" class="content-wrapper">
+  <div class="service-page" :class="{ 'is-loading': isLoading }">
+    <main class="content-wrapper">
       <!-- Hero Section -->
       <section class="hero-section">
-        <h1 class="service-title">{{ content.titre_service }}</h1>
+        <h1 class="service-title">
+          {{ content?.titre_service || ' ' }}
+          <div v-if="isLoading" class="skeleton skeleton-title"></div>
+        </h1>
         <div class="top-para">
-          <p class="top-para-text">{{ content.top_paragraph.content }}</p>
+          <p class="top-para-text">
+            {{ content?.top_paragraph?.content || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-text"></div>
+          </p>
         </div>
       </section>
 
       <!-- Content Block -->
       <section class="content-block">
         <div class="text-content">
-          <h6 class="block-title">{{ content.block.titre }}</h6>
-          <p class="block-text">{{ content.block.texte }}</p>
+          <h6 class="block-title">
+            {{ content?.block?.titre || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-subtitle"></div>
+          </h6>
+          <p class="block-text">
+            {{ content?.block?.texte || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-text"></div>
+          </p>
         </div>
-        <img :src="content.block.image" alt="Image Block 1" class="block-image">
+        <div class="image-wrapper">
+          <img
+            v-if="!isLoading && content?.block?.image"
+            :src="content.block.image"
+            alt="Image Block 1"
+            class="block-image"
+          />
+          <div v-else class="skeleton skeleton-image"></div>
+        </div>
       </section>
-    </main>
-
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
     </main>
   </div>
   <Feedback />
   <Footer />
 </template>
 
-<script lang="js">
+<script>
 export default {
   data() {
     return {
       content: null,
+      isLoading: true,
     }
   },
   async mounted() {
-    const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5829");
-    const page = await resp.json();
-    this.content = page.acf;
+    try {
+      const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5829");
+      const page = await resp.json();
+      this.content = page.acf;
+    } catch (error) {
+      console.error("Error loading content:", error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 }
 </script>
 
 <style scoped>
-/* === Color Palette === */
-:root {
-  --brown-dark: #5D4037;
-  --brown-light: #8D6E63;
-  --blue-dark: #1565C0;
-  --blue-light: #42A5F5;
-  --green-dark: #2E7D32;
-  --green-light: #66BB6A;
-  --text-dark: #333333;
-  --text-light: #666666;
-  --bg-light: #F9F9F9;
-}
-
-/* === Base Styles === */
+/* Fade-in on content load */
 .service-page {
-  font-family: 'Raleway', sans-serif;
-  color: var(--text-dark);
-  line-height: 1.6;
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 20px;
+  font-family: 'Raleway', sans-serif;
+  color: #333;
+  line-height: 1.6;
+  transition: opacity 0.4s ease-in;
+  opacity: 1;
+}
+
+.service-page.is-loading {
+  opacity: 0.5; /* dim the content when loading */
+  pointer-events: none;
 }
 
 /* === Hero Section === */
@@ -81,11 +97,12 @@ export default {
   font-weight: 700;
   color: #1a365d;
   margin-bottom: 20px;
+  position: relative;
 }
 
 .top-para-text {
   font-size: 0.95rem;
-  color: var(--text-light);
+  color: #666;
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.7;
@@ -107,15 +124,16 @@ export default {
 .block-title {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--blue-dark);
+  color: #1565C0;
   margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  position: relative;
 }
 
 .block-text {
   font-size: 0.95rem;
-  color: var(--text-dark);
+  color: #333;
   line-height: 1.7;
   margin-bottom: 0;
 }
@@ -131,36 +149,62 @@ export default {
   transform: scale(1.02);
 }
 
-/* === Loading State === */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: var(--text-light);
+.image-wrapper {
+  order: 1;
 }
 
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid var(--blue-dark);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
+/* === Skeleton Styles === */
+.skeleton {
+  background-color: #ddd;
+  border-radius: 4px;
+  animation: pulse 1.5s ease-in-out infinite;
+  margin-top: 5px;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.skeleton-title {
+  width: 60%;
+  height: 32px;
+  margin: 10px auto 0 auto;
 }
 
-/* === Responsive Design === */
+.skeleton-subtitle {
+  width: 40%;
+  height: 20px;
+  margin: 10px 0;
+}
+
+.skeleton-text {
+  width: 100%;
+  height: 14px;
+  margin: 6px 0;
+}
+
+.skeleton-image {
+  width: 100%;
+  max-width: 400px;
+  height: 250px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0% {
+    background-color: #eee;
+  }
+  50% {
+    background-color: #ddd;
+  }
+  100% {
+    background-color: #eee;
+  }
+}
+
+/* Responsive Design */
 @media (min-width: 768px) {
   .content-block {
     flex-direction: row;
-    align-items: flex-start; /* Changed from center to flex-start */
+    align-items: flex-start;
     gap: 40px;
   }
   
@@ -170,7 +214,7 @@ export default {
     padding-right: 30px;
   }
   
-  .block-image {
+  .image-wrapper {
     flex: 1;
     order: 2;
     max-width: 50%;
@@ -181,7 +225,7 @@ export default {
   }
 
   .block-text {
-    font-size: 0.9rem; /* Slightly smaller for desktop */
+    font-size: 0.9rem;
   }
 }
 

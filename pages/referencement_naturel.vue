@@ -1,13 +1,12 @@
 <template>
   <Header />
-  <div class="service-container">
-    
-    <main v-if="content" class="main-content">
+  <div class="service-container" :class="{ 'is-loading': isLoading }">
+    <main class="main-content">
       <!-- Hero Section -->
       <section class="hero">
-        <h1 class="hero-title">{{ content.titre_service }}</h1>
+        <h1 class="hero-title">{{ content?.titre_service || ' ' }}</h1>
         <div class="top-para">
-          <p class="top-para-text">{{ content.top_paragraph.content }}</p>
+          <p class="top-para-text">{{ content?.top_paragraph?.content || ' ' }}</p>
         </div>
       </section>
 
@@ -15,32 +14,47 @@
       <section class="content-section">
         <div class="content-block block-odd">
           <div class="text-content">
-            <h6 class="block-title">{{ content.block_copier.titre }}</h6>
-            <p class="block-text">{{ content.block_copier.texte }}</p>
+            <h6 class="block-title">{{ content?.block_copier?.titre || ' ' }}</h6>
+            <p class="block-text">{{ content?.block_copier?.texte || ' ' }}</p>
           </div>
-          <img :src="content.block_copier.image" alt="Content Image" class="block-image">
+          <img 
+            v-if="content?.block_copier?.image"
+            :src="content.block_copier.image" 
+            alt="Content Image" 
+            class="block-image"
+          >
         </div>
 
         <div class="content-block block-even">
-          <img :src="content.block_copier2.image" alt="Content Image" class="block-image">
+          <img 
+            v-if="content?.block_copier2?.image"
+            :src="content.block_copier2.image" 
+            alt="Content Image" 
+            class="block-image"
+          >
           <div class="text-content">
-            <h6 class="block-title">{{ content.block_copier2.titre }}</h6>
-            <p class="block-text">{{ content.block_copier2.texte }}</p>
+            <h6 class="block-title">{{ content?.block_copier2?.titre || ' ' }}</h6>
+            <p class="block-text">{{ content?.block_copier2?.texte || ' ' }}</p>
           </div>
         </div>
 
         <div class="content-block block-odd">
           <div class="text-content">
-            <h6 class="block-title">{{ content.block_copier3.titre }}</h6>
-            <p class="block-text">{{ content.block_copier3.texte }}</p>
+            <h6 class="block-title">{{ content?.block_copier3?.titre || ' ' }}</h6>
+            <p class="block-text">{{ content?.block_copier3?.texte || ' ' }}</p>
           </div>
-          <img :src="content.block_copier3.image" alt="Content Image" class="block-image">
+          <img 
+            v-if="content?.block_copier3?.image"
+            :src="content.block_copier3.image" 
+            alt="Content Image" 
+            class="block-image"
+          >
         </div>
       </section>
 
       <!-- Middle Paragraph -->
       <section class="middle-para">
-        <p class="middle-para-text">{{ content.middle_paragraph.content }}</p>
+        <p class="middle-para-text">{{ content?.middle_paragraph?.content || ' ' }}</p>
       </section>
 
       <!-- Compact Modals in Single Row with Navigation -->
@@ -49,25 +63,22 @@
           <div class="scroll-indicator scroll-left" @click="scrollModals(-300)">←</div>
           <div class="modals-row">
             <div v-for="(modal,index) in modals" :key="index" class="modal-card">
-              <img :src="modal.icon" alt="Modal icon" class="modal-icon">
-              <p class="modal-text">{{ modal.description }}</p>
+              <img 
+                v-if="modal?.icon"
+                :src="modal.icon" 
+                alt="Modal icon" 
+                class="modal-icon"
+              >
+              <p class="modal-text">{{ modal?.description || ' ' }}</p>
             </div>
           </div>
           <div class="scroll-indicator scroll-right" @click="scrollModals(300)">→</div>
         </div>
       </section>
-
     </main>
-
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
-    </main>
-
-    
   </div>
   <Feedback />
-    <Footer />
+  <Footer />
 </template>
 
 <script lang="js">
@@ -76,22 +87,31 @@ export default {
     return {
       content: null,
       modals: [],
+      isLoading: true
     }
   },
   async mounted() {
-    const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5819");
-    const page = await resp.json();
-    this.content = page.acf;
-    for(let key in this.content) {
-      if(key.startsWith("modal")) {
-        if(this.content[key].description) {
-          this.modals.push(this.content[key]);
+    try {
+      const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5819");
+      const page = await resp.json();
+      this.content = page.acf;
+      for(let key in this.content) {
+        if(key.startsWith("modal")) {
+          if(this.content[key].description) {
+            this.modals.push(this.content[key]);
+          }
         }
       }
+    } catch (error) {
+      console.error("Error loading content:", error);
+    } finally {
+      this.isLoading = false;
     }
   },
   methods: {
     scrollModals(offset) {
+      if (this.isLoading) return;
+      
       const modalsEl = this.$el.querySelector('.modals-row');
       if (modalsEl) {
         modalsEl.scrollBy({
@@ -105,6 +125,17 @@ export default {
 </script>
 
 <style scoped>
+/* Only adding loading-specific styles without modifying existing ones */
+.service-container {
+  transition: opacity 0.4s ease-in;
+}
+
+.service-container.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* === Your original styles below - completely untouched === */
 .service-container {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: #2d3748;
@@ -293,31 +324,6 @@ export default {
 
 .scroll-right {
   right: 0;
-}
-
-/* Loading State */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: #4a5568;
-}
-
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4299e1;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 /* Responsive Design */

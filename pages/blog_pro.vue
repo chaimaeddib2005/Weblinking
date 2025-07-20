@@ -24,9 +24,30 @@
       </section>
     </main>
 
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
+    <main v-else class="content-placeholder">
+      <!-- Hero Placeholder -->
+      <section class="hero">
+        <h1 class="hero-title"></h1>
+        <h3 class="hero-subtitle"></h3>
+      </section>
+
+      <!-- Content Block 1 Placeholder -->
+      <section class="content-block block-1">
+        <div class="text-content">
+          <h6 class="block-title"></h6>
+          <p class="block-text"></p>
+        </div>
+        <div class="block-image-placeholder"></div>
+      </section>
+
+      <!-- Content Block 2 Placeholder -->
+      <section class="content-block block-2">
+        <div class="block-image-placeholder"></div>
+        <div class="text-content">
+          <h6 class="block-title"></h6>
+          <p class="block-text"></p>
+        </div>
+      </section>
     </main>
 
     <Feedback />
@@ -56,7 +77,7 @@ export default {
   line-height: 1.6;
 }
 
-.content-wrapper {
+.content-wrapper, .content-placeholder {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
@@ -137,34 +158,72 @@ export default {
   transform: scale(1.02);
 }
 
-/* Loading State */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: #4a5568;
+/* Placeholder Styles */
+.content-placeholder .hero-title,
+.content-placeholder .hero-subtitle,
+.content-placeholder .block-title,
+.content-placeholder .block-text {
+  background-color: #f3f3f3;
+  color: transparent;
+  position: relative;
+  overflow: hidden;
 }
 
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4299e1;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
+.content-placeholder .hero-title {
+  height: 2.8rem;
+  width: 60%;
+  margin: 0 auto 1rem;
+}
+
+.content-placeholder .hero-subtitle {
+  height: 1.4rem;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.content-placeholder .block-title {
+  height: 1.4rem;
+  width: 50%;
   margin-bottom: 1.5rem;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.content-placeholder .block-text {
+  height: 5rem;
+}
+
+.content-placeholder .block-image-placeholder {
+  flex: 1;
+  height: 300px;
+  max-width: 50%;
+  background-color: #f3f3f3;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation */
+@keyframes placeholderShimmer {
+  0% { background-position: -468px 0 }
+  100% { background-position: 468px 0 }
+}
+
+.content-placeholder .hero-title,
+.content-placeholder .hero-subtitle,
+.content-placeholder .block-title,
+.content-placeholder .block-text,
+.content-placeholder .block-image-placeholder {
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+  background: linear-gradient(to right, #f3f3f3 8%, #ececec 18%, #f3f3f3 33%);
+  background-size: 800px 104px;
+  position: relative;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .content-wrapper {
+  .content-wrapper, .content-placeholder {
     padding: 0 1.5rem;
   }
 
@@ -191,9 +250,28 @@ export default {
     min-width: 100%;
   }
 
-  .block-image {
+  .block-image, .content-placeholder .block-image-placeholder {
     max-width: 100%;
     margin-top: 1.5rem;
+  }
+
+  /* Adjust placeholder sizes for mobile */
+  .content-placeholder .hero-title {
+    height: 2.2rem;
+    width: 80%;
+  }
+
+  .content-placeholder .hero-subtitle {
+    height: 1.2rem;
+    width: 70%;
+  }
+
+  .content-placeholder .block-image-placeholder {
+    height: 200px;
+  }
+
+  .content-placeholder .block-text {
+    height: 3.5rem;
   }
 }
 </style>

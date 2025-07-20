@@ -20,9 +20,23 @@
       </div>
     </main>
 
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
+    <main v-else class="content-placeholder">
+      <!-- Hero Placeholder -->
+      <section class="hero">
+        <h1 class="service-title"></h1>
+        <h5 class="service-subtitle"></h5>
+      </section>
+
+      <!-- Content Blocks Placeholder -->
+      <div class="blocks-container">
+        <div v-for="i in 3" :key="i" class="content-block" :class="{'image-right': i % 2 === 0, 'image-left': i % 2 !== 0}">
+          <div class="block-content">
+            <h5 class="block-title"></h5>
+            <p class="block-text"></p>
+          </div>
+          <div class="block-image-placeholder"></div>
+        </div>
+      </div>
     </main>
   </div>
   <Feedback />
@@ -145,7 +159,6 @@ export default {
 .block-image {
   width: 45%;
   border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
 }
 
@@ -162,29 +175,69 @@ export default {
   flex-direction: row-reverse;
 }
 
-/* Loading State */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: var(--text-light);
+/* === Placeholder Styles === */
+.content-placeholder .service-title,
+.content-placeholder .service-subtitle,
+.content-placeholder .block-title,
+.content-placeholder .block-text {
+  background-color: #f3f3f3;
+  color: transparent;
+  position: relative;
+  overflow: hidden;
 }
 
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid var(--blue-dark);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
+.content-placeholder .service-title {
+  height: 2.8rem;
+  width: 60%;
+  margin: 0 auto 20px;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.content-placeholder .service-subtitle {
+  height: 1.2rem;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.content-placeholder .block-title {
+  height: 1.6rem;
+  width: 50%;
+  margin-bottom: 15px;
+}
+
+.content-placeholder .block-title::after {
+  display: none;
+}
+
+.content-placeholder .block-text {
+  height: 4.5rem;
+}
+
+.content-placeholder .block-image-placeholder {
+  width: 45%;
+  height: 250px;
+  background-color: #f3f3f3;
+  border-radius: 8px;
+}
+
+/* Animation */
+@keyframes placeholderShimmer {
+  0% { background-position: -468px 0 }
+  100% { background-position: 468px 0 }
+}
+
+.content-placeholder .service-title,
+.content-placeholder .service-subtitle,
+.content-placeholder .block-title,
+.content-placeholder .block-text,
+.content-placeholder .block-image-placeholder {
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+  background: linear-gradient(to right, #f3f3f3 8%, #ececec 18%, #f3f3f3 33%);
+  background-size: 800px 104px;
+  position: relative;
 }
 
 /* === Responsive Design === */
@@ -202,9 +255,14 @@ export default {
     gap: 30px;
   }
   
-  .block-image {
+  .block-image,
+  .content-placeholder .block-image-placeholder {
     width: 100%;
     order: -1;
+  }
+  
+  .content-placeholder .block-image-placeholder {
+    height: 200px;
   }
   
   .block-content {
@@ -219,6 +277,20 @@ export default {
   
   .blocks-container {
     gap: 40px;
+  }
+  
+  .content-placeholder .service-title {
+    height: 2.2rem;
+    width: 80%;
+  }
+  
+  .content-placeholder .service-subtitle {
+    height: 1rem;
+    width: 90%;
+  }
+  
+  .content-placeholder .block-text {
+    height: 3.5rem;
   }
 }
 </style>

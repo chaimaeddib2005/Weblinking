@@ -1,57 +1,104 @@
 <template>
-  <div class="service-page">
-    <Header />
-    <div v-if="content" class="content-container">
-      <div class="hero-section">
-        <h1 class="service-title">{{ content.titre_service }}</h1>
-        <h3 class="service-subtitle">{{content.sous_titre}}</h3>
-      </div>
+  <Header />
+    
+  <div class="service-page" :class="{ 'is-loading': isLoading }">
+    
+    <main class="content-wrapper">
+      <section class="hero">
+        <h1 class="hero-title">
+          {{ content?.titre_service || ' ' }}
+          <div v-if="isLoading" class="skeleton skeleton-title"></div>
+        </h1>
+        <h3 class="hero-subtitle">
+          {{ content?.sous_titre || ' ' }}
+          <div v-if="isLoading" class="skeleton skeleton-subtitle"></div>
+        </h3>
+      </section>
 
       <div class="top-section">
-        <h2 class="section-title">{{ content.top_paragraph.title }}</h2>
+        <h2 class="section-title">
+          {{ content?.top_paragraph?.title || ' ' }}
+          <div v-if="isLoading" class="skeleton skeleton-subtitle"></div>
+        </h2>
       </div>
 
-      <div class="content-block block-1">
+      <section class="content-block block-1">
         <div class="text-content">
-          <h2 class="block-title">{{ content.block.titre }}</h2>
-          <p class="block-text">{{ content.block.texte }}</p>
+          <h2 class="block-title">
+            {{ content?.block?.titre || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-subtitle"></div>
+          </h2>
+          <p class="block-text">
+            {{ content?.block?.texte || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-text"></div>
+          </p>
         </div>
-        <img :src="content.block.image" class="block-image" />
-      </div>
+        <div class="image-wrapper">
+          <img
+            v-if="!isLoading && content?.block?.image"
+            :src="content.block.image"
+            :alt="content.block.titre"
+            class="block-image"
+          />
+          <div v-else class="skeleton skeleton-image"></div>
+        </div>
+      </section>
 
-      <div class="content-block block-2">
-        <img :src="content.block_copier.image" class="block-image" />
+      <section class="content-block block-2">
+        <div class="image-wrapper">
+          <img
+            v-if="!isLoading && content?.block_copier?.image"
+            :src="content.block_copier.image"
+            :alt="content.block_copier.titre"
+            class="block-image"
+          />
+          <div v-else class="skeleton skeleton-image"></div>
+        </div>
         <div class="text-content">
-          <h2 class="block-title">{{ content.block_copier.titre }}</h2>
-          <p class="block-text">{{ content.block_copier.texte }}</p>
+          <h2 class="block-title">
+            {{ content?.block_copier?.titre || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-subtitle"></div>
+          </h2>
+          <p class="block-text">
+            {{ content?.block_copier?.texte || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-text"></div>
+          </p>
         </div>
-      </div>
+      </section>
 
-      <div class="middle-section">
-        <h6 class="middle-text">{{ content.middle_paragraph.content }}</h6>
-      </div>
+      <section class="middle-section">
+        <h6 class="middle-text">
+          {{ content?.middle_paragraph?.content || ' ' }}
+          <div v-if="isLoading" class="skeleton skeleton-text"></div>
+        </h6>
+      </section>
 
-      <!-- Updated Modals Section with Scroll -->
-      <div class="modals-container">
+      <section class="modals-container">
         <div class="modals-row">
-          <div v-for="(modal,index) in modals" :key="index" class="modal-card">
-            <img :src="modal.icon" class="modal-icon">
-            <p class="modal-description">{{ modal.description }}</p>
+          <div v-for="(modal, index) in modals" :key="index" class="modal-card">
+            <div class="image-wrapper">
+              <img 
+                v-if="!isLoading && modal.icon" 
+                :src="modal.icon" 
+                class="modal-icon"
+              />
+              <div v-else class="skeleton skeleton-icon"></div>
+            </div>
+            <p class="modal-description">
+              {{ modal.description || ' ' }}
+              <div v-if="isLoading" class="skeleton skeleton-text"></div>
+            </p>
           </div>
         </div>
         <div class="scroll-indicator scroll-left" @click="scrollModals(-300)">←</div>
         <div class="scroll-indicator scroll-right" @click="scrollModals(300)">→</div>
-      </div>
-    </div>
-
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
+      </section>
     </main>
 
-    <Feedback />
-    <Footer />
+    
   </div>
+  <Feedback />
+    <Footer />
 </template>
 
 <script lang="js">
@@ -60,22 +107,32 @@ export default {
     return {
       content: null,
       modals: [],
-    }
+      isLoading: true
+    };
   },
   async mounted() {
-    const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5811");
-    const page = await resp.json();
-    this.content = page.acf;
-    for(let key in this.content) {
-      if(key.startsWith("modal")) {
-        if(this.content[key].description) {
-          this.modals.push(this.content[key]);
+    try {
+      const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5811");
+      const page = await resp.json();
+      this.content = page.acf;
+      
+      for (let key in this.content) {
+        if (key.startsWith("modal")) {
+          if (this.content[key].description) {
+            this.modals.push(this.content[key]);
+          }
         }
       }
+    } catch (error) {
+      console.error("Error loading content:", error);
+    } finally {
+      this.isLoading = false;
     }
   },
   methods: {
     scrollModals(offset) {
+      if (this.isLoading) return;
+      
       const modalsEl = this.$el.querySelector('.modals-row');
       if (modalsEl) {
         modalsEl.scrollBy({
@@ -89,20 +146,85 @@ export default {
 </script>
 
 <style scoped>
+/* Loading State */
+.service-page {
+  opacity: 1;
+  transition: opacity 0.4s ease-in;
+}
+
+.service-page.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Skeleton Styles */
+.skeleton {
+  background-color: #ddd;
+  border-radius: 4px;
+  animation: pulse 1.5s ease-in-out infinite;
+  margin-top: 5px;
+}
+
+.skeleton-title {
+  width: 60%;
+  height: 32px;
+  margin: 10px auto 0 auto;
+}
+
+.skeleton-subtitle {
+  width: 40%;
+  height: 20px;
+  margin: 10px 0;
+}
+
+.skeleton-text {
+  width: 100%;
+  height: 14px;
+  margin: 6px 0;
+}
+
+.skeleton-image {
+  width: 100%;
+  max-width: 400px;
+  height: 250px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.skeleton-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0% {
+    background-color: #eee;
+  }
+  50% {
+    background-color: #ddd;
+  }
+  100% {
+    background-color: #eee;
+  }
+}
+
+/* === Keep your existing styles below === */
 .service-page {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
   line-height: 1.6;
 }
 
-.content-container {
+.content-wrapper {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-/* Hero Section */
-.hero-section {
+.hero {
   text-align: center;
   padding: 60px 0 40px;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
@@ -110,20 +232,19 @@ export default {
   border-radius: 8px;
 }
 
-.service-title {
+.hero-title {
   font-size: 2.5rem;
   color: #2c3e50;
   margin-bottom: 15px;
   font-weight: 700;
 }
 
-.service-subtitle {
+.hero-subtitle {
   font-size: 1.5rem;
   color: #7f8c8d;
   font-weight: 400;
 }
 
-/* Sections */
 .section-title {
   font-size: 2rem;
   color: #2c3e50;
@@ -131,7 +252,6 @@ export default {
   text-align: center;
 }
 
-/* Content Blocks */
 .content-block {
   display: flex;
   align-items: center;
@@ -176,7 +296,10 @@ export default {
   box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
-/* Middle Section */
+.image-wrapper {
+  flex: 1;
+}
+
 .middle-section {
   text-align: center;
   margin: 50px 0;
@@ -192,7 +315,6 @@ export default {
   margin: 0 auto;
 }
 
-/* Updated Modals Section */
 .modals-container {
   position: relative;
   margin: 60px 0 80px;
@@ -245,7 +367,6 @@ export default {
   color: #555;
 }
 
-/* Scroll Indicators */
 .scroll-indicator {
   position: absolute;
   top: 50%;
@@ -280,31 +401,6 @@ export default {
   right: -25px;
 }
 
-/* Loading State */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: #4a5568;
-}
-
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4299e1;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 /* Responsive Design */
 @media (max-width: 1024px) {
   .modal-card {
@@ -317,38 +413,39 @@ export default {
     flex-direction: column;
     padding: 20px;
   }
-  
+
   .block-1, .block-2 {
     flex-direction: column;
   }
-  
+
   .block-image {
     max-width: 100%;
     margin-top: 20px;
   }
-  
-  .service-title {
+
+  .hero-title {
     font-size: 2rem;
   }
-  
-  .service-subtitle {
+
+  .hero-subtitle {
     font-size: 1.2rem;
   }
-  
+
   .modal-card {
     min-width: 280px;
+  padding: 20px;
   }
-  
+
   .scroll-indicator {
     width: 40px;
     height: 40px;
     font-size: 1.2rem;
   }
-  
+
   .scroll-left {
     left: -15px;
   }
-  
+
   .scroll-right {
     right: -15px;
   }

@@ -43,9 +43,51 @@
       </div>
     </main>
 
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
+    <main v-else class="content-placeholder">
+      <!-- Hero Placeholder -->
+      <div class="hero-section">
+        <h1 class="main-title"></h1>
+      </div>
+
+      <!-- Top Paragraph Placeholder -->
+      <div class="top_para centered-section">
+        <h3 class="section-title"></h3>
+        <p class="section-text"></p>
+      </div>
+
+      <!-- Content Block 1 Placeholder -->
+      <div class="content-block para1">
+        <div class="block-text">
+          <h6 class="block-title"></h6>
+          <p class="block-content"></p>
+        </div>
+        <div class="block-image-placeholder"></div>
+      </div>
+
+      <!-- Content Block 2 Placeholder -->
+      <div class="content-block para2">
+        <div class="block-image-placeholder"></div>
+        <div class="block-text">
+          <h6 class="block-title"></h6>
+          <p class="block-content"></p>
+        </div>
+      </div>
+
+      <!-- Middle Paragraph Placeholder -->
+      <div class="middle_para centered-section">
+        <h5 class="section-title"></h5>
+        <p class="section-text"></p>
+      </div>
+
+      <!-- Modals Placeholder -->
+      <div class="modals-container">
+        <div class="modals">
+          <div class="modal" v-for="i in 3" :key="i">
+            <div class="modal-icon-placeholder"></div>
+            <p class="modal-text"></p>
+          </div>
+        </div>
+      </div>
     </main>
 
     <Feedback />
@@ -78,7 +120,7 @@ export default {
 </script>
 
 <style scoped>
-/* Base Styles */
+/* Original styles remain unchanged */
 .main-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -88,7 +130,6 @@ export default {
   line-height: 1.6;
 }
 
-/* Hero Section */
 .hero-section {
   text-align: center;
   padding: 3rem 0;
@@ -115,7 +156,6 @@ export default {
   border-radius: 2px;
 }
 
-/* Centered Sections */
 .centered-section {
   text-align: center;
   max-width: 800px;
@@ -136,13 +176,11 @@ export default {
   line-height: 1.7;
 }
 
-/* Content Blocks */
 .content-block {
   display: flex;
   align-items: center;
   gap: 3rem;
   margin-bottom: 4rem;
-  
   border-bottom: #2d3748 1px solid;
 }
 
@@ -161,7 +199,6 @@ export default {
   font-size: 1.1rem;
   color: #4a5568;
   line-height: 1.7;
-
 }
 
 .block-image {
@@ -175,7 +212,6 @@ export default {
   transform: translateY(-5px);
 }
 
-/* Modals Section */
 .modals-container {
   background-color: #f8fafc;
   padding: 3rem 0;
@@ -222,95 +258,131 @@ export default {
   line-height: 1.6;
 }
 
-/* Loading State (preserved) */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: #4a5568;
+/* Placeholder Styles */
+.content-placeholder .main-title,
+.content-placeholder .section-title,
+.content-placeholder .section-text,
+.content-placeholder .block-title,
+.content-placeholder .block-content,
+.content-placeholder .modal-text {
+  background-color: #f3f3f3;
+  color: transparent;
+  position: relative;
+  overflow: hidden;
 }
 
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4299e1;
+.content-placeholder .main-title {
+  height: 2.8rem;
+  width: 60%;
+  margin: 0 auto 1rem;
+}
+
+.content-placeholder .main-title::after {
+  display: none;
+}
+
+.content-placeholder .section-title {
+  height: 1.8rem;
+  width: 50%;
+  margin: 0 auto 1.5rem;
+}
+
+.content-placeholder .section-text {
+  height: 1.1rem;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.content-placeholder .block-title {
+  height: 1.5rem;
+  width: 60%;
+  margin-bottom: 1rem;
+}
+
+.content-placeholder .block-content {
+  height: 4rem;
+}
+
+.content-placeholder .block-image-placeholder {
+  flex: 1;
+  height: 250px;
+  max-width: 50%;
+  background-color: #f3f3f3;
+  border-radius: 12px;
+}
+
+.content-placeholder .modal-icon-placeholder {
+  width: 70px;
+  height: 70px;
+  background-color: #f3f3f3;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
+  margin: 0 auto 1.5rem;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.content-placeholder .modal-text {
+  height: 1rem;
+  width: 90%;
+  margin: 0 auto;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 992px) {
-  .content-block {
-    gap: 2rem;
-  }
-  
-  .modal {
-    min-width: 180px;
-  }
+/* Animation */
+@keyframes placeholderShimmer {
+  0% { background-position: -468px 0 }
+  100% { background-position: 468px 0 }
 }
 
+.content-placeholder .main-title,
+.content-placeholder .section-title,
+.content-placeholder .section-text,
+.content-placeholder .block-title,
+.content-placeholder .block-content,
+.content-placeholder .modal-text,
+.content-placeholder .block-image-placeholder,
+.content-placeholder .modal-icon-placeholder {
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+  background: linear-gradient(to right, #f3f3f3 8%, #ececec 18%, #f3f3f3 33%);
+  background-size: 800px 104px;
+  position: relative;
+}
+
+/* Responsive Adjustments for Placeholders */
 @media (max-width: 768px) {
-  .main-title {
-    font-size: 2.2rem;
+  .content-placeholder .main-title {
+    height: 2.2rem;
+    width: 80%;
   }
   
-  .content-block {
-    flex-direction: column;
-    gap: 1.5rem;
+  .content-placeholder .section-title {
+    height: 1.6rem;
   }
   
-  .block-image {
+  .content-placeholder .block-image-placeholder {
     max-width: 100%;
     order: -1;
+    height: 200px;
   }
   
-  .para2 .block-image {
-    order: -1;
-  }
-  
-  .section-title {
-    font-size: 1.6rem;
-  }
-  
-  .modal {
-    min-width: 160px;
-    padding: 1.5rem 1rem;
+  .content-placeholder .block-content {
+    height: 3rem;
   }
 }
 
 @media (max-width: 576px) {
-  .main-content {
-    padding: 0 1rem 2rem;
+  .content-placeholder .main-title {
+    height: 1.8rem;
+    width: 90%;
   }
   
-  .main-title {
-    font-size: 1.8rem;
+  .content-placeholder .section-text {
+    width: 100%;
   }
   
-  .centered-section {
-    padding: 0;
-  }
-  
-  .modals {
-    gap: 1rem;
-  }
-  
-  .modal {
-    min-width: 100%;
-    max-width: 100%;
+  .content-placeholder .block-title {
+    width: 80%;
   }
 }
 </style>

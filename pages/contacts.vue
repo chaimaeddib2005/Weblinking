@@ -40,9 +40,25 @@
       </div>
     </main>
 
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Loading content...</p>
+    <main v-else class="content-placeholder">
+      <div class="contact-content">
+        <div class="contact-title placeholder-title"></div>
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fas fa-phone placeholder-icon"></i>
+            <div class="placeholder-text"></div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope placeholder-icon"></i>
+            <div class="placeholder-text"></div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt placeholder-icon"></i>
+            <div class="placeholder-text"></div>
+          </div>
+        </div>
+        <div class="map-container placeholder-map"></div>
+      </div>
     </main>
   </div>
 
@@ -61,7 +77,7 @@ export default {
       content: null,
     };
   },
-  async mounted() {
+  async created() {
     const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5911");
     const page = await resp.json();
     this.content = page.acf;
@@ -70,7 +86,6 @@ export default {
 </script>
 
 <style scoped>
-
 .contact-content {
   background: white;
   border-radius: 8px;
@@ -109,14 +124,12 @@ export default {
   font-size: 1.1rem;
   color: #4a5568;
 }
+
 .contact-item i {
   margin-right: 0.5rem;
   color: #2c5282;
   font-size: 1.2rem;
 }
-
-
-
 
 .contact-item a {
   color: #2b6cb0;
@@ -135,36 +148,71 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Loading State */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: #4a5568;
+/* Placeholder Styles */
+.content-placeholder .contact-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
 }
 
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4299e1;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
+.placeholder-title {
+  height: 3rem;
+  width: 60%;
+  margin: 0 auto 2rem;
+  position: relative;
+  background-color: #f3f3f3;
+  border-radius: 4px;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.placeholder-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: #f3f3f3;
 }
 
-/* Feedback Container - Full Width */
-.feedback-container {
-  width: 100%;
-  margin: 0;
-  padding: 0;
+.placeholder-icon {
+  margin-right: 0.5rem;
+  color: #f3f3f3;
+  font-size: 1.2rem;
+}
+
+.placeholder-text {
+  height: 1.2rem;
+  width: 200px;
+  background-color: #f3f3f3;
+  border-radius: 4px;
+}
+
+.placeholder-map {
+  height: 450px;
+  background-color: #f3f3f3;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+/* Animation */
+@keyframes placeholderShimmer {
+  0% { background-position: -468px 0 }
+  100% { background-position: 468px 0 }
+}
+
+.placeholder-title,
+.placeholder-text,
+.placeholder-map {
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+  background: linear-gradient(to right, #f3f3f3 8%, #ececec 18%, #f3f3f3 33%);
+  background-size: 800px 104px;
+  position: relative;
 }
 
 /* Responsive Design */
@@ -183,6 +231,15 @@ export default {
 
   .contact-item {
     font-size: 1rem;
+  }
+
+  .placeholder-title {
+    width: 80%;
+    height: 2.5rem;
+  }
+
+  .placeholder-text {
+    width: 150px;
   }
 }
 </style>

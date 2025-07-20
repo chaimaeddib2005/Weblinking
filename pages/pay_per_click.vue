@@ -40,9 +40,44 @@
         </div>
     </main>
 
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
+    <main v-else class="main-content placeholder-content">
+        <div class="hero-section">
+            <h1 class="main-title"></h1>
+        </div>
+
+        <div class="top-para content-section">
+            <h4 class="section-title"></h4>
+            <p class="section-text"></p>
+        </div>
+
+        <div class="content-grid">
+            <div class="content-block para1">
+                <p class="block-text"></p>
+                <div class="block-image-placeholder"></div>
+            </div>
+
+            <div class="content-block para2">
+                <div class="block-image-placeholder"></div>
+                <div class="text-content">
+                    <h2 class="block-title"></h2>
+                    <p class="block-text"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="middle-para content-section">
+            <h4 class="section-title"></h4>
+            <p class="section-text"></p>
+        </div>
+
+        <div class="modals-container">
+            <div class="modals-grid">
+                <div v-for="i in 3" :key="i" class="modal-card">
+                    <div class="modal-icon-placeholder"></div>
+                    <p class="modal-text"></p>
+                </div>
+            </div>
+        </div>
     </main>
 
     <Feedback />
@@ -222,29 +257,92 @@ export default{
     line-height: 1.6;
 }
 
-/* Loading State (preserved) */
-.loading-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 50vh;
-    color: #4a5568;
+/* Placeholder Styles */
+.placeholder-content .main-title,
+.placeholder-content .section-title,
+.placeholder-content .section-text,
+.placeholder-content .block-title,
+.placeholder-content .block-text,
+.placeholder-content .modal-text {
+    background-color: #f3f3f3;
+    color: transparent;
+    position: relative;
+    overflow: hidden;
 }
 
-.loader {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #4299e1;
+.placeholder-content .main-title {
+    height: 3.2rem;
+    width: 50%;
+    margin: 0 auto 1rem;
+}
+
+.placeholder-content .main-title::after {
+    display: none;
+}
+
+.placeholder-content .section-title {
+    height: 2rem;
+    width: 60%;
+    margin: 0 auto 1.5rem;
+}
+
+.placeholder-content .section-text {
+    height: 4.5rem;
+}
+
+.placeholder-content .block-title {
+    height: 2rem;
+    width: 70%;
+    margin-bottom: 1rem;
+}
+
+.placeholder-content .block-text {
+    height: 5rem;
+}
+
+.placeholder-content .modal-text {
+    height: 3rem;
+    margin-top: 0.5rem;
+}
+
+.placeholder-content .block-image-placeholder {
+    flex: 1;
+    max-width: 45%;
+    height: 250px;
+    background-color: #f3f3f3;
+    border-radius: 12px;
+}
+
+.placeholder-content .modal-icon-placeholder {
+    width: 70px;
+    height: 70px;
+    background-color: #f3f3f3;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1.5rem;
+    margin: 0 auto 1.5rem;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* Animation */
+@keyframes placeholderShimmer {
+    0% { background-position: -468px 0 }
+    100% { background-position: 468px 0 }
+}
+
+.placeholder-content .main-title,
+.placeholder-content .section-title,
+.placeholder-content .section-text,
+.placeholder-content .block-title,
+.placeholder-content .block-text,
+.placeholder-content .modal-text,
+.placeholder-content .block-image-placeholder,
+.placeholder-content .modal-icon-placeholder {
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeholderShimmer;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #f3f3f3 8%, #ececec 18%, #f3f3f3 33%);
+    background-size: 800px 104px;
+    position: relative;
 }
 
 /* Responsive Adjustments */
@@ -253,6 +351,10 @@ export default{
         gap: 2rem;
         padding: 1.5rem;
     }
+    
+    .placeholder-content .block-image-placeholder {
+        height: 200px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -260,18 +362,32 @@ export default{
         font-size: 2.2rem;
     }
     
+    .placeholder-content .main-title {
+        height: 2.6rem;
+        width: 70%;
+    }
+    
     .content-block {
         flex-direction: column;
         gap: 1.5rem;
     }
     
-    .block-image {
+    .block-image,
+    .placeholder-content .block-image-placeholder {
         max-width: 100%;
         order: -1;
     }
     
     .modals-grid {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    
+    .placeholder-content .section-text {
+        height: 3.5rem;
+    }
+    
+    .placeholder-content .block-text {
+        height: 4rem;
     }
 }
 
@@ -284,8 +400,21 @@ export default{
         font-size: 1.8rem;
     }
     
+    .placeholder-content .main-title {
+        height: 2rem;
+        width: 80%;
+    }
+    
     .modal-card {
         padding: 1.5rem;
+    }
+    
+    .placeholder-content .section-title {
+        height: 1.6rem;
+    }
+    
+    .placeholder-content .block-title {
+        height: 1.6rem;
     }
 }
 </style>

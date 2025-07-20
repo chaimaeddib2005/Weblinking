@@ -1,34 +1,44 @@
 <template>
   <Header />
-  <div class="service-container" v-if="content">
+  <div class="service-container" :class="{ 'is-loading': isLoading }">
     
-    <main class="service-content" v-if="content">
+    <main class="service-content">
       <div class="hero-section">
-        <h1 class="service-title">{{ content.titre_service }}</h1>
-        
+        <h1 class="service-title">
+          {{ content?.titre_service || ' ' }}
+          <div v-if="isLoading" class="skeleton skeleton-title"></div>
+        </h1>
+
         <div class="top-paragraph">
-          <h3 class="paragraph-title">{{ content.top_paragraph.title }}</h3>
-          <p class="paragraph-text">{{ content.top_paragraph.content }}</p>
+          <h3 class="paragraph-title">
+            {{ content?.top_paragraph?.title || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-subtitle"></div>
+          </h3>
+          <p class="paragraph-text">
+            {{ content?.top_paragraph?.content || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-text"></div>
+          </p>
         </div>
       </div>
 
       <div class="features-grid">
-        <div v-for="(modal,index) in modals" :key="index" class="feature-card">
+        <div v-for="(modal, index) in modals" :key="index" class="feature-card">
           <div class="feature-icon">
-            <img :src="modal.icon" alt="Feature icon" />
+            <img v-if="!isLoading" :src="modal.icon" alt="Feature icon" />
+            <div v-else class="skeleton skeleton-icon"></div>
           </div>
-          <p class="feature-description">{{ modal.description }}</p>
+          <p class="feature-description">
+            {{ !isLoading ? modal.description : ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-text"></div>
+          </p>
         </div>
       </div>
     </main>
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
-    </main>
+
     
   </div>
   <Feedback />
-  <Footer />
+    <Footer />
 </template>
 
 <script lang="js">
@@ -37,18 +47,26 @@ export default {
     return {
       content: null,
       modals: [],
+      isLoading: true,
     }
   },
   async mounted() {
-    const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5813");
-    const page = await resp.json();
-    this.content = page.acf;
-    for(let key in this.content) {
-      if(key.startsWith("modal")) {
-        if(this.content[key].description) {
-          this.modals.push(this.content[key]);
+    try {
+      const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5813");
+      const page = await resp.json();
+      this.content = page.acf;
+      this.modals = [];
+      for (let key in this.content) {
+        if (key.startsWith("modal")) {
+          if (this.content[key].description) {
+            this.modals.push(this.content[key]);
+          }
         }
       }
+    } catch (error) {
+      console.error("Error loading content:", error);
+    } finally {
+      this.isLoading = false;
     }
   }
 }
@@ -61,17 +79,26 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  transition: opacity 0.4s ease-in;
+  opacity: 1;
+}
+
+.service-container.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .hero-section {
   text-align: center;
   padding: 60px 0 40px;
 }
+
 .service-title {
   font-size: 2.5rem;
   font-weight: 700;
   color: #1a365d;
   margin-bottom: 30px;
+  position: relative;
 }
 
 .top-paragraph {
@@ -83,13 +110,14 @@ export default {
   font-size: 1.5rem;
   color: #2c5282;
   margin-bottom: 20px;
+  position: relative;
 }
-
 
 .paragraph-text {
   font-size: 1.1rem;
   line-height: 1.8;
   color: #4a5568;
+  position: relative;
 }
 
 .features-grid {
@@ -106,6 +134,7 @@ export default {
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
+  position: relative;
 }
 
 .feature-card:hover {
@@ -123,6 +152,7 @@ export default {
   background: #ebf8ff;
   border-radius: 50%;
   padding: 15px;
+  position: relative;
 }
 
 .feature-icon img {
@@ -135,41 +165,53 @@ export default {
   font-size: 1rem;
   line-height: 1.6;
   color: #4a5568;
+  position: relative;
 }
 
-/* Loading State - Updated to match previous pages */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 70vh;
-  color: #2c3e50;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  margin: 20px 0;
-  padding: 40px;
+/* === Skeleton Styles === */
+.skeleton {
+  background-color: #ddd;
+  border-radius: 4px;
+  animation: pulse 1.5s ease-in-out infinite;
+  margin-top: 5px;
 }
 
-.loader {
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #00b489; /* Using the teal accent color */
+.skeleton-title {
+  width: 60%;
+  height: 32px;
+  margin: 10px auto 0 auto;
+}
+
+.skeleton-subtitle {
+  width: 40%;
+  height: 20px;
+  margin: 10px 0;
+}
+
+.skeleton-text {
+  width: 100%;
+  height: 14px;
+  margin: 6px 0;
+}
+
+.skeleton-icon {
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 2rem;
+  margin: 0 auto;
 }
 
-.loading-screen p {
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: #2c3e50;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* Pulse animation */
+@keyframes pulse {
+  0% {
+    background-color: #eee;
+  }
+  50% {
+    background-color: #ddd;
+  }
+  100% {
+    background-color: #eee;
+  }
 }
 
 /* Responsive adjustments */
@@ -177,29 +219,18 @@ export default {
   .service-title {
     font-size: 2rem;
   }
-  
+
   .paragraph-title {
     font-size: 1.3rem;
   }
-  
+
   .features-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
+
   .feature-card {
     padding: 20px;
-  }
-
-  .loading-screen {
-    min-height: 50vh;
-    padding: 30px;
-  }
-
-  .loader {
-    width: 50px;
-    height: 50px;
-    border-width: 4px;
   }
 }
 </style>

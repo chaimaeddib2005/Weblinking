@@ -1,37 +1,68 @@
 <template>
-  <div class="service-page">
-    <Header />
-    <main v-if="content" class="content-wrapper">
+  <Header />
+  <div class="service-page" :class="{ 'is-loading': isLoading }">
+    
+    <main class="content-wrapper">
       <section class="hero">
-        <h1 class="hero-title">{{ content.titre_service }}</h1>
-        <h3 class="hero-subtitle">{{ content.sous_titre }}</h3>
+        <h1 class="hero-title">
+          {{ content?.titre_service || ' ' }}
+          <div v-if="isLoading" class="skeleton skeleton-title"></div>
+        </h1>
+        <h3 class="hero-subtitle">
+          {{ content?.sous_titre || ' ' }}
+          <div v-if="isLoading" class="skeleton skeleton-subtitle"></div>
+        </h3>
       </section>
 
       <section class="content-block block-1">
         <div class="text-content">
-          <h6 class="block-title">{{ content.block.titre }}</h6>
-          <p class="block-text">{{ content.block.texte }}</p>
+          <h6 class="block-title">
+            {{ content?.block?.titre || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-subtitle"></div>
+          </h6>
+          <p class="block-text">
+            {{ content?.block?.texte || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-text"></div>
+          </p>
         </div>
-        <img :src="content.block.image" :alt="content.block.titre" class="block-image">
+        <div class="image-wrapper">
+          <img
+            v-if="!isLoading && content?.block?.image"
+            :src="content.block.image"
+            :alt="content.block.titre"
+            class="block-image"
+          />
+          <div v-else class="skeleton skeleton-image"></div>
+        </div>
       </section>
 
       <section class="content-block block-2">
-        <img :src="content.block_copier.image" :alt="content.block_copier.titre" class="block-image">
+        <div class="image-wrapper">
+          <img
+            v-if="!isLoading && content?.block_copier?.image"
+            :src="content.block_copier.image"
+            :alt="content.block_copier.titre"
+            class="block-image"
+          />
+          <div v-else class="skeleton skeleton-image"></div>
+        </div>
         <div class="text-content">
-          <h6 class="block-title">{{ content.block_copier.titre }}</h6>
-          <p class="block-text">{{ content.block_copier.texte }}</p>
+          <h6 class="block-title">
+            {{ content?.block_copier?.titre || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-subtitle"></div>
+          </h6>
+          <p class="block-text">
+            {{ content?.block_copier?.texte || ' ' }}
+            <div v-if="isLoading" class="skeleton skeleton-text"></div>
+          </p>
         </div>
       </section>
     </main>
 
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
-    </main>
-
-    <Feedback />
-    <Footer />
+    
   </div>
+  <Feedback />
+    <Footer />
 </template>
 
 <script lang="js">
@@ -39,12 +70,19 @@ export default {
   data() {
     return {
       content: null,
+      isLoading: true,
     }
   },
   async mounted() {
-    const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5815");
-    const page = await resp.json();
-    this.content = page.acf;
+    try {
+      const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5815");
+      const page = await resp.json();
+      this.content = page.acf;
+    } catch (error) {
+      console.error("Error loading content:", error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 }
 </script>
@@ -54,12 +92,16 @@ export default {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: #2d3748;
   line-height: 1.6;
-}
-
-.content-wrapper {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+  transition: opacity 0.4s ease-in;
+  opacity: 1;
+}
+
+.service-page.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 /* Hero Section */
@@ -75,12 +117,14 @@ export default {
   color: #1a365d;
   margin-bottom: 1rem;
   line-height: 1.2;
+  position: relative;
 }
 
 .hero-subtitle {
   font-size: 1.25rem;
   font-weight: 400;
   color: #4a5568;
+  position: relative;
 }
 
 /* Content Blocks */
@@ -106,6 +150,7 @@ export default {
 .text-content {
   flex: 1;
   min-width: 40%;
+  position: relative;
 }
 
 .block-title {
@@ -115,12 +160,14 @@ export default {
   margin-bottom: 1.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  position: relative;
 }
 
 .block-text {
   font-size: 1.1rem;
   color: #4a5568;
   line-height: 1.8;
+  position: relative;
 }
 
 .block-image {
@@ -137,34 +184,61 @@ export default {
   transform: scale(1.02);
 }
 
-/* Loading State */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: #4a5568;
+.image-wrapper {
+  flex: 1;
+  position: relative;
 }
 
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4299e1;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
+/* === Skeleton Styles === */
+.skeleton {
+  background-color: #ddd;
+  border-radius: 4px;
+  animation: pulse 1.5s ease-in-out infinite;
+  margin-top: 5px;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.skeleton-title {
+  width: 60%;
+  height: 32px;
+  margin: 10px auto 0 auto;
+}
+
+.skeleton-subtitle {
+  width: 40%;
+  height: 20px;
+  margin: 10px 0;
+}
+
+.skeleton-text {
+  width: 100%;
+  height: 14px;
+  margin: 6px 0;
+}
+
+.skeleton-image {
+  width: 100%;
+  max-width: 400px;
+  height: 250px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0% {
+    background-color: #eee;
+  }
+  50% {
+    background-color: #ddd;
+  }
+  100% {
+    background-color: #eee;
+  }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .content-wrapper {
+  .service-page {
     padding: 0 1.5rem;
   }
 

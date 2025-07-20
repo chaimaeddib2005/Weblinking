@@ -27,7 +27,6 @@ const fetchAllPosts = async () => {
 
 fetchAllPosts()
 
-// ✅ Strip HTML tags and decode HTML entities
 const stripHtml = (html) => {
   const tmp = document.createElement('div')
   tmp.innerHTML = html.replace(/<[^>]*>?/gm, '')
@@ -111,9 +110,20 @@ watch([selectedDate, keyword], () => {
     <!-- Error -->
     <div v-if="error" class="text-red-600 text-center">{{ error }}</div>
 
-    <!-- Loading -->
-    <div v-else-if="!allPosts.length" class="text-center text-gray-600">
-      Chargement des articles...
+    <!-- Loading Placeholders -->
+    <div v-else-if="!allPosts.length" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mb-10">
+      <div v-for="i in 6" :key="i" class="bg-white rounded-xl shadow overflow-hidden flex flex-col">
+        <div class="h-48 w-full bg-gray-200 animate-pulse"></div>
+        <div class="p-5 flex-1 flex flex-col">
+          <div class="h-6 w-3/4 bg-gray-200 rounded mb-3 animate-pulse"></div>
+          <div class="space-y-2">
+            <div class="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
+            <div class="h-4 w-5/6 bg-gray-200 rounded animate-pulse"></div>
+            <div class="h-4 w-4/5 bg-gray-200 rounded animate-pulse"></div>
+          </div>
+          <div class="h-4 w-1/3 bg-gray-200 rounded mt-4 animate-pulse"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Posts -->
@@ -141,7 +151,7 @@ watch([selectedDate, keyword], () => {
               {{ stripHtml(post.excerpt.rendered) }}
             </p>
             <span class="text-blue-600 mt-auto text-sm font-medium hover:underline">
-              Lire l’article →
+              Lire l'article →
             </span>
           </div>
         </NuxtLink>

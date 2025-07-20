@@ -1,43 +1,49 @@
 <template>
   <Header />
-  <div class="service-page" v-if="content">
+  <div class="service-page" :class="{ 'is-loading': isLoading }">
     <div class="service-header">
-      <h2 class="service-title">{{ content.titre_service }}</h2>
-      <h4 class="service-subtitle">{{ content.sous_titre }}</h4>
+      <h2 class="service-title">{{ content?.titre_service || ' ' }}</h2>
+      <h4 class="service-subtitle">{{ content?.sous_titre || ' ' }}</h4>
     </div>
 
     <div class="content-blocks">
       <div class="content-block para1">
         <div class="text-content">
-          <h6 class="block-title">{{ content.block.titre }}</h6>
-          <p class="block-text">{{ content.block.texte }}</p>
+          <h6 class="block-title">{{ content?.block?.titre || ' ' }}</h6>
+          <p class="block-text">{{ content?.block?.texte || ' ' }}</p>
         </div>
-        <img :src="content.block.image" :alt="content.block.titre" class="block-image">
+        <img
+          v-if="content?.block?.image"
+          :src="content.block.image"
+          :alt="content.block.titre"
+          class="block-image"
+        />
       </div>
 
       <div class="content-block para2">
-        <img :src="content.block_copier.image" :alt="content.block_copier.titre" class="block-image">
+        <img
+          v-if="content?.block_copier?.image"
+          :src="content.block_copier.image"
+          :alt="content.block_copier.titre"
+          class="block-image"
+        />
         <div class="text-content">
-          <h6 class="block-title">{{ content.block_copier.titre }}</h6>
-          <p class="block-text">{{ content.block_copier.texte }}</p>
+          <h6 class="block-title">{{ content?.block_copier?.titre || ' ' }}</h6>
+          <p class="block-text">{{ content?.block_copier?.texte || ' ' }}</p>
         </div>
       </div>
     </div>
   </div>
-  <main v-else class="loading-screen">
-    <div class="loader"></div>
-    <p>Chargement du contenu...</p>
-    </main>
   <Feedback />
   <Footer />
 </template>
-
 
 <script>
 export default {
   data() {
     return {
-      content: null
+      content: null,
+      isLoading: true,
     }
   },
   async mounted() {
@@ -47,36 +53,25 @@ export default {
       this.content = page.acf;
     } catch (error) {
       console.error("Error loading content:", error);
+    } finally {
+      this.isLoading = false;
     }
   }
 }
 </script>
 
 <style scoped>
-/* Loading State */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: #4a5568;
+/* Fade-in on content load */
+.service-page {
+  opacity: 1;
+  transition: opacity 0.4s ease-in;
 }
 
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4299e1;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
+.service-page.is-loading {
+  opacity: 0.3;
+  pointer-events: none;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 /* Base Styles */
 .service-page {
   max-width: 1200px;
@@ -170,24 +165,24 @@ export default {
   .service-title {
     font-size: 2rem;
   }
-  
+
   .service-subtitle {
     font-size: 1.1rem;
   }
-  
+
   .content-block {
     flex-direction: column;
   }
-  
+
   .para2 {
     flex-direction: column;
   }
-  
+
   .block-image {
     max-width: 100%;
     margin-top: 30px;
   }
-  
+
   .block-title {
     font-size: 1.3rem;
   }
@@ -197,15 +192,15 @@ export default {
   .service-header {
     margin-bottom: 40px;
   }
-  
+
   .service-title {
     font-size: 1.8rem;
   }
-  
+
   .content-blocks {
     gap: 50px;
   }
-  
+
   .block-text {
     font-size: 1rem;
   }

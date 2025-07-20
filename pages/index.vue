@@ -8,13 +8,13 @@
         <h1>{{ content.titre }}</h1>
         <p class="subtitle">{{ content.titre_copier }}</p>
         <a 
-        class="fixed-contact-button whatsapp-button"
-        style="width:fit-content"
-        :href="`tel:${phone_number}`"
-        aria-label="Appelez-nous"
-      >
+          class="fixed-contact-button whatsapp-button"
+          style="width:fit-content"
+          :href="`tel:${phone_number}`"
+          aria-label="Appelez-nous"
+        >
           Tél: +{{ phone_number  }}
-      </a>
+        </a>
       </div>
       <div class="hero-image">
         <img :src="content.top_image" alt="Hero Image">
@@ -91,7 +91,6 @@
         <div class="stat-name">{{ content.stats_copier3.nom }}</div>
         <div class="stat-value">{{ content.stats_copier3.percentage }} h</div>
       </div> 
-      
     </div>
 
     <!-- Partners Section -->
@@ -118,9 +117,111 @@
       <img :src="content.paragraph_copier3.image" alt="Content Image">
     </div>
   </div>
-  <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
+  <main v-else class="placeholder-container">
+    <!-- Hero Section Placeholder -->
+    <div class="hero-section placeholder">
+      <div class="hero-text placeholder">
+        <div class="placeholder-line" style="width: 70%; height: 20px; margin-bottom: 15px;"></div>
+        <div class="placeholder-line" style="width: 100%; height: 40px; margin-bottom: 15px;"></div>
+        <div class="placeholder-line" style="width: 80%; height: 25px; margin-bottom: 25px;"></div>
+        <div class="placeholder-line" style="width: 200px; height: 40px;"></div>
+      </div>
+      <div class="hero-image placeholder">
+        <div class="placeholder-image"></div>
+      </div>
+    </div>
+
+    <!-- Centered Titles Placeholder -->
+    <div class="centered-titles placeholder">
+      <div class="placeholder-line" style="width: 40%; height: 18px; margin: 0 auto 10px;"></div>
+      <div class="placeholder-line" style="width: 60%; height: 30px; margin: 0 auto;"></div>
+    </div>
+
+    <!-- Services Placeholder -->
+    <div class="services-container placeholder">
+      <div class="services">
+        <div class="service placeholder" v-for="i in 4" :key="'service-'+i">
+          <div class="placeholder-image" style="width: 70px; height: 70px; margin-bottom: 20px;"></div>
+          <div class="placeholder-line" style="width: 80%; height: 22px; margin-bottom: 15px;"></div>
+          <div class="placeholder-line" style="width: 100%; height: 16px;"></div>
+          <div class="placeholder-line" style="width: 90%; height: 16px; margin-top: 8px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Section Placeholder -->
+    <div class="contact-section placeholder" style="height: 100px;"></div>
+
+    <!-- Realisations Placeholder -->
+    <div class="realisations placeholder">
+      <div class="placeholder-line" style="width: 30%; height: 32px; margin: 0 auto 40px;"></div>
+      <div class="products-grid">
+        <div class="product-card placeholder" v-for="i in 3" :key="'product-'+i">
+          <div class="placeholder-image" style="height: 200px;"></div>
+          <div class="product-info">
+            <div class="placeholder-line" style="width: 80%; height: 22px; margin-bottom: 15px;"></div>
+            <div class="placeholder-line" style="width: 100%; height: 16px;"></div>
+            <div class="placeholder-line" style="width: 90%; height: 16px; margin-top: 8px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="placeholder-line" style="width: 200px; height: 40px; margin: 40px auto 0;"></div>
+    </div>
+
+    <!-- SEO Section Placeholder -->
+    <div class="paragraph1 placeholder">
+      <div class="placeholder-line" style="width: 50%; height: 18px; margin-bottom: 15px;"></div>
+      <div class="placeholder-line" style="width: 70%; height: 28px; margin-bottom: 20px;"></div>
+      <div class="placeholder-line" style="width: 100%; height: 16px; margin-bottom: 8px;"></div>
+      <div class="placeholder-line" style="width: 95%; height: 16px; margin-bottom: 8px;"></div>
+      <div class="placeholder-line" style="width: 90%; height: 16px; margin-bottom: 30px;"></div>
+      <div class="placeholder-image" style="height: 300px;"></div>
+    </div>
+
+    <!-- Stats Placeholder -->
+    <div class="stats placeholder">
+      <div class="stat placeholder" v-for="i in 4" :key="'stat-'+i">
+        <div class="placeholder-line" style="width: 70%; height: 18px; margin-bottom: 15px;"></div>
+        <div class="placeholder-line" style="width: 50%; height: 32px; margin: 0 auto;"></div>
+      </div>
+    </div>
+
+    <!-- Partners Placeholder -->
+    <div class="placeholder" style="text-align: center; margin: 80px 0 40px;">
+      <div class="placeholder-line" style="width: 40%; height: 32px; margin: 0 auto 40px;"></div>
+      <div class="partenaires">
+        <div class="partenaire placeholder" v-for="i in 5" :key="'partner-'+i">
+          <div class="placeholder-image" style="height: 60px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Content Placeholders -->
+    <div class="placeholder" style="text-align: center; margin: 80px 0 40px;">
+      <div class="placeholder-line" style="width: 50%; height: 32px; margin: 0 auto;"></div>
+    </div>
+    
+    <div class="para1 placeholder">
+      <div class="placeholder-line" style="width: 100%; height: 16px; margin-bottom: 8px;"></div>
+      <div class="placeholder-line" style="width: 95%; height: 16px; margin-bottom: 8px;"></div>
+      <div class="placeholder-line" style="width: 90%; height: 16px; margin-bottom: 30px;"></div>
+      <div class="placeholder-image" style="height: 300px;"></div>
+    </div>
+    
+    <div class="para2 placeholder">
+      <div class="placeholder-image" style="height: 300px; margin-bottom: 30px;"></div>
+      <div class="placeholder-line" style="width: 60%; height: 28px; margin-bottom: 20px;"></div>
+      <div class="placeholder-line" style="width: 80%; height: 16px; margin-bottom: 8px;"></div>
+      <div class="placeholder-line" style="width: 85%; height: 16px; margin-bottom: 8px;"></div>
+      <div class="placeholder-line" style="width: 75%; height: 16px;"></div>
+    </div>
+    
+    <div class="para3 placeholder">
+      <div class="placeholder-line" style="width: 100%; height: 16px; margin-bottom: 8px;"></div>
+      <div class="placeholder-line" style="width: 95%; height: 16px; margin-bottom: 8px;"></div>
+      <div class="placeholder-line" style="width: 90%; height: 16px; margin-bottom: 30px;"></div>
+      <div class="placeholder-image" style="height: 300px;"></div>
+    </div>
   </main>
 
   <Footer />
@@ -211,6 +312,51 @@ export default {
 </script>
 
 <style scoped>
+/* All your existing styles remain the same */
+
+/* Add these new styles for the placeholders */
+.placeholder-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.placeholder {
+  background-color: #f6f7f8;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.placeholder-line {
+  background-color: #e1e1e1;
+  border-radius: 4px;
+  height: 16px;
+  margin-bottom: 8px;
+  animation: placeholderShimmer 1.5s infinite linear;
+}
+
+.placeholder-image {
+  background-color: #e1e1e1;
+  width: 100%;
+  height: 100%;
+  animation: placeholderShimmer 1.5s infinite linear;
+}
+
+@keyframes placeholderShimmer {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Maintain all your existing styles below */
 /* Base Styles */
 .container {
   max-width: 1200px;
@@ -613,30 +759,6 @@ button:hover {
   font-size: 2rem;
 }
 
-/* Loading State */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: #4a5568;
-}
-
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4299e1;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 /* Responsive Design */
 @media (max-width: 992px) {
   .hero-section {

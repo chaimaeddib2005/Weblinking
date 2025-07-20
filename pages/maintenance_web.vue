@@ -40,9 +40,44 @@
         </div>
     </main>
     
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
+    <main v-else class="main-content placeholder-content">
+        <h1 class="service-title"></h1>
+        
+        <div class="top_para content-section">
+            <h3 class="section-subtitle"></h3>
+            <p class="section-text"></p>
+        </div>
+        
+        <div class="para1 content-section">
+            <div class="text-content">
+                <h4 class="block-title"></h4>
+                <p class="block-text"></p>
+            </div>
+            <div class="content-image-placeholder"></div>
+        </div>
+        
+        <div class="para2 content-section">
+            <div class="content-image-placeholder"></div>
+            <div class="text-content">
+                <h4 class="block-title"></h4>
+                <p class="block-text"></p>
+            </div>
+        </div>
+        
+        <!-- Modern Gauge Placeholder -->
+        <div class="modern-gauges">
+            <div class="gauge-row">
+                <div class="gauge-item" v-for="i in 4" :key="i">
+                    <div class="gauge-wrapper">
+                        <div class="gauge-percentage-placeholder"></div>
+                        <div class="gauge-container">
+                            <div class="gauge-bar-placeholder"></div>
+                        </div>
+                    </div>
+                    <div class="gauge-title-placeholder"></div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <Feedback />
@@ -173,32 +208,7 @@ export default {
     transform: scale(1.02);
 }
 
-/* Loading State (preserved) */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: #4a5568;
-}
-
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4299e1;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Modern Gauge Styles (preserved) */
+/* Modern Gauge Styles */
 .modern-gauges {
     padding: 3rem 1rem;
     margin: 2rem auto;
@@ -259,6 +269,98 @@ export default {
     margin-top: 0.5rem;
 }
 
+/* Placeholder Styles */
+.placeholder-content .service-title,
+.placeholder-content .section-subtitle,
+.placeholder-content .section-text,
+.placeholder-content .block-title,
+.placeholder-content .block-text,
+.placeholder-content .gauge-percentage-placeholder,
+.placeholder-content .gauge-title-placeholder {
+    background-color: #f3f3f3;
+    color: transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.placeholder-content .service-title {
+    height: 3rem;
+    width: 50%;
+    margin: 0 auto 2rem;
+}
+
+.placeholder-content .section-subtitle {
+    height: 1.8rem;
+    width: 60%;
+    margin-bottom: 1rem;
+}
+
+.placeholder-content .section-text {
+    height: 4rem;
+}
+
+.placeholder-content .block-title {
+    height: 1.5rem;
+    width: 70%;
+    margin-bottom: 1rem;
+}
+
+.placeholder-content .block-text {
+    height: 4rem;
+}
+
+.placeholder-content .content-image-placeholder {
+    flex: 1;
+    max-width: 50%;
+    height: 250px;
+    background-color: #f3f3f3;
+    border-radius: 8px;
+}
+
+.placeholder-content .gauge-percentage-placeholder {
+    height: 2.2rem;
+    width: 60px;
+    margin: 0 auto 0.3rem;
+}
+
+.placeholder-content .gauge-bar-placeholder {
+    height: 100%;
+    width: 70%;
+    background-color: #f3f3f3;
+    border-radius: 4px;
+}
+
+.placeholder-content .gauge-title-placeholder {
+    height: 1.1rem;
+    width: 80%;
+    margin: 0.5rem auto 0;
+}
+
+/* Animation */
+@keyframes placeholderShimmer {
+    0% { background-position: -468px 0 }
+    100% { background-position: 468px 0 }
+}
+
+.placeholder-content .service-title,
+.placeholder-content .section-subtitle,
+.placeholder-content .section-text,
+.placeholder-content .block-title,
+.placeholder-content .block-text,
+.placeholder-content .content-image-placeholder,
+.placeholder-content .gauge-percentage-placeholder,
+.placeholder-content .gauge-bar-placeholder,
+.placeholder-content .gauge-title-placeholder {
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeholderShimmer;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #f3f3f3 8%, #ececec 18%, #f3f3f3 33%);
+    background-size: 800px 104px;
+    position: relative;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .service-title {
@@ -269,7 +371,8 @@ export default {
         flex-direction: column;
     }
     
-    .content-image {
+    .content-image,
+    .placeholder-content .content-image-placeholder {
         max-width: 100%;
         margin-bottom: 1.5rem;
     }
@@ -282,8 +385,13 @@ export default {
         min-width: 140px;
     }
     
-    .gauge-percentage {
-        font-size: 1.8rem;
+    .placeholder-content .service-title {
+        height: 2.4rem;
+        width: 70%;
+    }
+    
+    .placeholder-content .content-image-placeholder {
+        height: 200px;
     }
 }
 
@@ -305,6 +413,19 @@ export default {
     .gauge-item {
         width: 100%;
         max-width: 220px;
+    }
+    
+    .placeholder-content .service-title {
+        height: 2rem;
+        width: 80%;
+    }
+    
+    .placeholder-content .section-text {
+        height: 3rem;
+    }
+    
+    .placeholder-content .block-text {
+        height: 3rem;
     }
 }
 </style>

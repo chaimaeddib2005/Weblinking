@@ -52,11 +52,55 @@
       </section>
     </main>
 
-    <main v-else class="loading-screen">
-      <div class="loader"></div>
-      <p>Chargement du contenu...</p>
-    </main>
+    <main v-else class="main-content placeholder-content">
+      <!-- Hero Placeholder -->
+      <section class="hero">
+        <h1 class="hero-title"></h1>
+        <div class="top-para">
+          <p class="top-para-text"></p>
+        </div>
+      </section>
 
+      <!-- Content Blocks Placeholder -->
+      <section class="content-blocks">
+        <div class="content-block block-1">
+          <div class="text-content">
+            <h2 class="block-title"></h2>
+            <p class="block-text"></p>
+          </div>
+          <div class="block-image-placeholder"></div>
+        </div>
+
+        <div class="content-block block-2">
+          <div class="block-image-placeholder"></div>
+          <div class="text-content">
+            <h2 class="block-title"></h2>
+            <p class="block-text"></p>
+          </div>
+        </div>
+
+        <div class="content-block block-3">
+          <div class="block-image-placeholder"></div>
+          <div class="text-content">
+            <h2 class="block-title"></h2>
+            <p class="block-text"></p>
+          </div>
+        </div>
+
+        <div class="content-block block-4">
+          <div class="text-content">
+            <h2 class="block-title"></h2>
+            <p class="block-text"></p>
+          </div>
+          <div class="block-image-placeholder"></div>
+        </div>
+      </section>
+
+      <!-- Bottom Paragraph Placeholder -->
+      <section class="bottom-para">
+        <p class="bottom-para-text"></p>
+      </section>
+    </main>
     
   </div>
   <Feedback />
@@ -123,17 +167,15 @@ export default {
   border-radius: 8px;
 }
 
-
 .block-1, .block-4 {
   flex-direction: row;
 }
 
-.block-3, .block-2{
-
+.block-3, .block-2 {
   flex-direction: row-reverse;
 }
+
 .block-2, .block-4 {
-  
   background-color: #f7fafc;
 }
 
@@ -179,29 +221,74 @@ export default {
   line-height: 1.8;
 }
 
-/* Loading State (preserved exactly as provided) */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  color: #4a5568;
+/* Placeholder Styles */
+.placeholder-content .hero-title,
+.placeholder-content .top-para-text,
+.placeholder-content .block-title,
+.placeholder-content .block-text,
+.placeholder-content .bottom-para-text {
+  background-color: #f3f3f3;
+  color: transparent;
+  position: relative;
+  overflow: hidden;
 }
 
-.loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4299e1;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
+.placeholder-content .hero-title {
+  height: 3rem;
+  width: 50%;
+  margin: 0 auto 20px;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.placeholder-content .top-para-text {
+  height: 4rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.placeholder-content .block-title {
+  height: 2rem;
+  width: 70%;
+  margin-bottom: 20px;
+}
+
+.placeholder-content .block-text {
+  height: 5rem;
+}
+
+.placeholder-content .bottom-para-text {
+  height: 4rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.placeholder-content .block-image-placeholder {
+  flex: 1;
+  max-width: 50%;
+  height: 300px;
+  background-color: #f3f3f3;
+  border-radius: 8px;
+}
+
+/* Animation */
+@keyframes placeholderShimmer {
+  0% { background-position: -468px 0 }
+  100% { background-position: 468px 0 }
+}
+
+.placeholder-content .hero-title,
+.placeholder-content .top-para-text,
+.placeholder-content .block-title,
+.placeholder-content .block-text,
+.placeholder-content .bottom-para-text,
+.placeholder-content .block-image-placeholder {
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+  background: linear-gradient(to right, #f3f3f3 8%, #ececec 18%, #f3f3f3 33%);
+  background-size: 800px 104px;
+  position: relative;
 }
 
 /* Responsive Design */
@@ -216,7 +303,8 @@ export default {
     flex-direction: column;
   }
 
-  .block-image {
+  .block-image,
+  .placeholder-content .block-image-placeholder {
     max-width: 100%;
     order: -1;
   }
@@ -225,8 +313,25 @@ export default {
     font-size: 2rem;
   }
 
+  .placeholder-content .hero-title {
+    height: 2.4rem;
+    width: 70%;
+  }
+
   .block-title {
     font-size: 1.5rem;
+  }
+
+  .placeholder-content .block-title {
+    height: 1.6rem;
+  }
+
+  .placeholder-content .block-text {
+    height: 4rem;
+  }
+
+  .placeholder-content .block-image-placeholder {
+    height: 200px;
   }
 }
 </style>
