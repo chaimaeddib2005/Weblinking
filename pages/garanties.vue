@@ -77,11 +77,6 @@
           Le fait que ces algorithmes sont variables et en changement permanent affecte directement et considérablement le positionnement des sites de nos clients en fonction des règles de classement prescrits par Google.
         </p>
       </div>
-      
-      <div class="cta-section">
-        <h3 class="cta-title">Prêt à améliorer votre classement?</h3>
-        <button class="cta-button">Démarrer mon projet</button>
-      </div>
     </div>
   </div>
   <Footer />
