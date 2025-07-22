@@ -106,7 +106,7 @@ export default {
   async mounted() {
     //const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5833");
     //const page = await resp.json();
-    const page =  this.$pageCache.getPage(5833);
+    const page = this.$pageCache.getPage(5833);
     this.content = page.acf;
 
     for (let key in this.content) {
@@ -370,6 +370,27 @@ export default {
   .content-placeholder .block-content {
     height: 3rem;
   }
+
+  /* --- NEW: Make content blocks stack vertically --- */
+  .content-block {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .content-block.para1 .block-image,
+  .content-block.para2 .block-image {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+  }
+
+  .content-block.para2 {
+    flex-direction: column;
+  }
+
+  .block-text {
+    flex: none;
+  }
 }
 
 @media (max-width: 576px) {
@@ -384,6 +405,21 @@ export default {
   
   .content-placeholder .block-title {
     width: 80%;
+  }
+}
+
+/* Additional small screen polish */
+@media (max-width: 480px) {
+  .content-block {
+    padding: 0 1rem;
+  }
+
+  .block-title {
+    font-size: 1.3rem;
+  }
+
+  .block-content {
+    font-size: 1rem;
   }
 }
 </style>
