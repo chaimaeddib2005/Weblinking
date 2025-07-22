@@ -54,8 +54,9 @@ export default {
   },
   async mounted() {
     try {
-      const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5825");
-      const page = await resp.json();
+      //const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5825");
+      //const page = await resp.json();
+      const page = this.$pageCache.getPage(5825);
       this.content = page.acf;
     } catch (error) {
       console.error("Error loading content:", error);

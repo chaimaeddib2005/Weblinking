@@ -96,8 +96,9 @@ export default{
     },
     async mounted(){
         try {
-            const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5837");
-            const page = await resp.json();
+            //const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5837");
+            //const page = await resp.json();
+            const page = this.$pageCache.getPage(5837);
             this.content = page.acf;
             this.stats = [
                 this.content?.stats,
