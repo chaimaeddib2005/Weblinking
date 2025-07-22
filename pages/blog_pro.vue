@@ -63,8 +63,9 @@ export default {
     }
   },
   async mounted() {
-    const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5817");
-    const page = await resp.json();
+    //const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5817");
+    //const page = await resp.json();
+    const page =  this.$pageCache.getPage(5817);
     this.content = page.acf;
   }
 }

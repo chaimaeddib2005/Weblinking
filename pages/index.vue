@@ -246,8 +246,9 @@ export default {
       const contact = await contactpromise.json();
       this.phone_number = contact.acf.phone_number;
       
-      const res = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5737");
-      const page = await res.json();
+    //  const res = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5737");
+    //  const page = await res.json();
+        const page =  this.$pageCache.getPage(5737);
       this.content = page.acf;
       
       this.links = [

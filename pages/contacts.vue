@@ -78,8 +78,9 @@ export default {
     };
   },
   async created() {
-    const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5911");
-    const page = await resp.json();
+    //const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5911");
+    //const page = await resp.json();
+    const page =  this.$pageCache.getPage(5911);
     this.content = page.acf;
   },
 };

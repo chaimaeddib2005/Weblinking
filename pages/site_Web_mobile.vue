@@ -52,8 +52,9 @@ export default {
   },
   async mounted() {
     try {
-      const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5813");
-      const page = await resp.json();
+      //const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5813");
+      //const page = await resp.json();
+      const page = this.$pageCache.getPage(5813);
       this.content = page.acf;
       this.modals = [];
       for (let key in this.content) {

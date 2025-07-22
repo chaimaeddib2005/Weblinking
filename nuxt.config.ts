@@ -10,5 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxt/image',
     '@nuxtjs/tailwindcss'
-  ]
+  ],
+  plugins: [
+    '~/plugins/pageCache.js'],
 })

@@ -93,8 +93,9 @@ export default{
         }
     },
     async mounted(){
-        const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5839");
-        const page = await resp.json();
+        //const resp = await fetch("https://web.weblinking.fr/wp-json/wp/v2/pages/5839");
+        //const page = await resp.json();
+        const page =  this.$pageCache.getPage(5839);
         this.content = page.acf;
         for(let key in this.content){
             if(key.startsWith("modal")){
