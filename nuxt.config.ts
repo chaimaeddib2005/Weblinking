@@ -11,6 +11,20 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/tailwindcss'
   ],
+    routeRules: {
+    // Cache WordPress API calls for 1 day (client-side)
+    '/api/wordpress/**': {
+      cache: { 
+        swr: true,
+        maxAge: 1,//86400, // 1 day
+        staleMaxAge: 1//172800 // 2 days fallback
+      }
+    },
+    // Pre-render home page
+    '/': { prerender: true },
+    // Cache blog pages for 1 hour
+    '/blog/**': { swr: 3600 }
+  },
   plugins: [
     '~/plugins/pageCache.js'],
 })
