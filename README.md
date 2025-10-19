@@ -2,6 +2,7 @@ This website is developed during my internship in the Weblinking Sarl SEO agency
 Where I emigrated their website from an entirely Wordpress head CMS, to a headless Wordpress.
 THe frontend is developed using Nuxt'js and the content is retrieved via REST API.
 To visit the website followe the link: 
+https://weblinking.vercel.app/
 # Nuxt Minimal Starter
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
